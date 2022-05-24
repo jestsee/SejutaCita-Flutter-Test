@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sejuta_cita_test/screens/home/home-screen.dart';
+import 'package:sejuta_cita_test/screens/homepage/home-screen.dart';
 
 void main() {
   runApp(const MyApp());

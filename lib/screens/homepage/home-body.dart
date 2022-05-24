@@ -10,7 +10,7 @@ class HomeBody extends StatelessWidget {
     return Center(
       child: Column(
         children: <Widget>[
-          SearchBar(hint: "Search here",
+          SearchBar(hint: "Search hereeeee?",
               onChanged: (value) {}
           )
         ],
