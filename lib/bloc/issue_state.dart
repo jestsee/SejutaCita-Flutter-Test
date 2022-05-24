@@ -11,12 +11,15 @@ class IssueLoadingState extends IssueState {
 
 // TODO harus dibedain bloc nya buat per issue, repo, user gitu ga ya?
 class IssueLoadedState extends IssueState {
-  final String issueTitle;
-  final DateTime issueUpdateAt;
-  // TODO issues di kanan atas?
-  final String issueState;
+  final Future<List<Item>> items;
 
-  IssueLoadedState(this.issueTitle, this.issueUpdateAt, this.issueState);
+  IssueLoadedState(this.items);
   @override
-  List<Object?> get props => [issueTitle, issueUpdateAt, issueState];
+  List<Object?> get props => [items];
+}
+
+class IssueNoInternetState extends IssueState {
+  @override
+  // TODO: implement props
+  List<Object?> get props => throw UnimplementedError();
 }
