@@ -22,6 +22,7 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
     on<GetNewIssueEvent>(_onNewIssueFetched);
   }
 
+  // melanjutkan dari query yang sudah ada
   Future<void> _onIssueFetched(
       GetIssueEvent event, Emitter<IssueState> emit) async {
     if (state.hasReachedMax) return;
@@ -42,19 +43,20 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
     }
   }
 
+  // memulai query baru
   Future<void> _onNewIssueFetched(
       GetNewIssueEvent event, Emitter<IssueState> emit) async {
+    emit(state.copyWith(status: IssueStatus.loading));
     if (state.hasReachedMax) return;
     try {
       log("masuk initial state new issue");
       query = event.query; // set new query
       final issues = await _issueRepo.getIssues(query, 1);
-      return emit(state.copyWith(
+      emit(state.copyWith(
         status: IssueStatus.success,
         items: issues,
         hasReachedMax: false,
       ));
-
     } catch (_) {
       emit(state.copyWith(status: IssueStatus.failure));
     }

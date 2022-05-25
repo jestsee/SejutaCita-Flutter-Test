@@ -27,12 +27,10 @@ class SearchBar extends StatelessWidget {
         onChanged: onChanged,
         onSubmitted: (value) {
           log("submit clicked, value:$value");
-
           context.read<IssueBloc>().add(GetNewIssueEvent(value));
 
           // final issueBloc = BlocProvider.of<IssueBloc>(context);
           // issueBloc.query = value;
-
           // context.read<IssueBloc>().add(IssueFetchedEvent());
         },
         decoration: const InputDecoration(

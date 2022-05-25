@@ -5,6 +5,7 @@ import 'package:sejuta_cita_test/components/search-bar.dart';
 
 import '../../components/bottom-loader.dart';
 import '../../components/custom-bar.dart';
+import '../../components/custom-bottom-bar.dart';
 import '../../components/issue-list-item.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -62,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
       ),
+      bottomNavigationBar: CustomBottomBar(),
     );
   }
 

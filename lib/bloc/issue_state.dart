@@ -1,6 +1,6 @@
 part of 'issue_bloc.dart';
 
-enum IssueStatus { initial, success, failure }
+enum IssueStatus { loading, initial, success, failure }
 
 class IssueState extends Equatable {
   const IssueState(
