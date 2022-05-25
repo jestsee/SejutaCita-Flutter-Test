@@ -16,7 +16,7 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
   final IssueRepo _issueRepo;
   // final String query;
 
-  String query = "ayam";
+  String query = "doraemon"; // TODO
 
   // initial state
   IssueBloc(this._issueRepo) : super(const IssueState()) {
@@ -36,7 +36,11 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
         ));
       }
 
-      final issues = await _issueRepo.getIssues(query, 2);
+      // TODO kalo hasil baginya desimal
+      int page = state.items.length~/30;
+      log("page: $page");
+
+      final issues = await _issueRepo.getIssues(query, page+1);
       emit(issues.isEmpty
           ? state.copyWith(hasReachedMax: true)
           : state.copyWith(
