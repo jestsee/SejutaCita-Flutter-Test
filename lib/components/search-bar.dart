@@ -1,4 +1,10 @@
+import 'dart:developer';
+
 import "package:flutter/material.dart";
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sejuta_cita_test/bloc/issue_bloc.dart';
+
+import '../repository/issue-repository.dart';
 
 class SearchBar extends StatelessWidget {
   final ValueChanged<String> onChanged;
@@ -19,6 +25,18 @@ class SearchBar extends StatelessWidget {
       child: TextField(
         style: const TextStyle(color: Colors.white),
         onChanged: onChanged,
+        onSubmitted: (value) {
+          log("submit clicked, value:$value");
+          final issueBloc = BlocProvider.of<IssueBloc>(context);
+          issueBloc.query = value;
+
+          // context.read<IssueBloc>().add(IssueFetchedEvent());
+
+          // BlocProvider(
+          //   create: (context) =>
+          //       IssueBloc(IssueRepo(), value)..add(IssueFetchedEvent()),
+          // );
+        },
         decoration: const InputDecoration(
           suffixIcon: Icon(Icons.search),
           hintText: "Search",
