@@ -1,25 +1,34 @@
 part of 'issue_bloc.dart';
 
-abstract class IssueState extends Equatable {
-  const IssueState();
-}
+enum IssueStatus { initial, success, failure }
 
-class IssueLoadingState extends IssueState {
+class IssueState extends Equatable {
+  const IssueState(
+      {this.status = IssueStatus.initial,
+      this.items = const <Item>[],
+      this.hasReachedMax = false});
+
+  final IssueStatus status;
+  final List<Item> items;
+  final bool hasReachedMax;
+
+  IssueState copyWith({
+    IssueStatus? status,
+    List<Item>? items,
+    bool? hasReachedMax,
+  }) {
+    return IssueState(
+      status: status ?? this.status,
+      items: items ?? this.items,
+      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+    );
+  }
+
   @override
-  List<Object> get props => [];
-}
+  String toString() {
+    return '''IssueState { status: $status, hasReachedMax: $hasReachedMax, items: ${items.length} }''';
+  }
 
-// TODO harus dibedain bloc nya buat per issue, repo, user gitu ga ya?
-class IssueLoadedState extends IssueState {
-  final Future<List<Item>> items;
-
-  IssueLoadedState(this.items);
   @override
-  List<Object?> get props => [items];
-}
-
-class IssueNoInternetState extends IssueState {
-  @override
-  // TODO: implement props
-  List<Object?> get props => throw UnimplementedError();
+  List<Object> get props => [status, items, hasReachedMax];
 }

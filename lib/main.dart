@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sejuta_cita_test/bloc/issue_bloc.dart';
+import 'package:sejuta_cita_test/repository/issue-repository.dart';
 import 'package:sejuta_cita_test/screens/homepage/home-screen.dart';
 
 void main() {
@@ -15,9 +18,12 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primaryColor: Colors.white,
-        scaffoldBackgroundColor: Colors.blue,
+        scaffoldBackgroundColor: Colors.amber,
       ),
-      home: const HomeScreen(),
+      home: BlocProvider<IssueBloc>(
+        create: (context) => IssueBloc(IssueRepo())..add(IssueFetchedEvent()),
+        child: HomeScreen(),
+      ),
     );
   }
 }

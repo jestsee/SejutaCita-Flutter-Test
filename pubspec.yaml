@@ -39,6 +39,8 @@ dependencies:
   equatable: ^2.0.3
   http: ^0.13.4
   connectivity_plus: ^2.3.0
+  stream_transform: ^2.0.0
+  bloc_concurrency: ^0.2.0
 
 dev_dependencies:
   flutter_test:

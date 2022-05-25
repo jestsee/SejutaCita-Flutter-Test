@@ -2,6 +2,7 @@
 //
 //     final issue = issueFromJson(jsonString);
 
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
@@ -33,7 +34,7 @@ class Issue {
   };
 }
 
-class Item {
+class Item extends Equatable{
   Item({
     required this.title,
     required this.state,
@@ -61,4 +62,7 @@ class Item {
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
       };
+
+  @override
+  List<Object?> get props => [title, state, createdAt, updatedAt];
 }

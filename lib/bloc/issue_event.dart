@@ -2,16 +2,10 @@ part of 'issue_bloc.dart';
 
 abstract class IssueEvent extends Equatable {
   const IssueEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
-class LoadIssueEvent extends IssueEvent {
-  @override
-  // TODO: implement props
-  List<Object?> get props => [];
-}
-
-class NoInternetEvent extends IssueEvent {
-  @override
-  // TODO: implement props
-  List<Object?> get props => throw UnimplementedError();
-}
+// load issue baru
+class IssueFetchedEvent extends IssueEvent {}
