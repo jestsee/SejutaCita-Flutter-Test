@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 class CustomBar extends StatelessWidget with PreferredSizeWidget {
@@ -5,8 +7,34 @@ class CustomBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text("AHA"),
+    return SizedBox(
+      // height: 50,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text("Opsi user issues repo"),
+            ],
+          ),
+          Row(
+            children: [
+              TextButton(
+                  onPressed: () {
+                    log("lazy pressed");
+                  },
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.black)),
+                  child: Text("Lazy Loading")),
+              SizedBox(width: 10,),
+              TextButton(
+                  onPressed: () {},
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.black)),
+                  child: Text("With Index")),
+            ],
+          )
+        ],
+      ),
     );
   }
 

@@ -4,7 +4,7 @@ abstract class IssueEvent extends Equatable {
   const IssueEvent();
 }
 
-// load issue baru
+// load issue dengan query baru
 class GetNewIssueEvent extends IssueEvent {
   final String query;
 
@@ -14,7 +14,18 @@ class GetNewIssueEvent extends IssueEvent {
   List<Object?> get props => [query];
 }
 
+// load issue dengan query yang sudah ada
 class GetIssueEvent extends IssueEvent {
   @override
   List<Object?> get props => [];
+}
+
+// load issue pada page tertentu
+class GetIssuePageEvent extends IssueEvent {
+  final int page;
+
+  const GetIssuePageEvent(this.page);
+
+  @override
+  List<Object?> get props => [page];
 }

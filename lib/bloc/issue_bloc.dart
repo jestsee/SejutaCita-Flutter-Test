@@ -20,6 +20,7 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
   IssueBloc(this._issueRepo, this.query) : super(const IssueState()) {
     on<GetIssueEvent>(_onIssueFetched);
     on<GetNewIssueEvent>(_onNewIssueFetched);
+    on<GetIssuePageEvent>(_onIssuePageFetched);
   }
 
   // melanjutkan dari query yang sudah ada
@@ -32,11 +33,11 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
       log("page: $page");
 
       final issues = await _issueRepo.getIssues(query, page+1);
-      emit(issues.isEmpty
+      emit(issues.items.isEmpty
           ? state.copyWith(hasReachedMax: true)
           : state.copyWith(
               status: IssueStatus.success,
-              items: List.of(state.items)..addAll(issues),
+              items: List.of(state.items)..addAll(issues.items),
               hasReachedMax: false));
     } catch (_) {
       emit(state.copyWith(status: IssueStatus.failure));
@@ -54,9 +55,27 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
       final issues = await _issueRepo.getIssues(query, 1);
       emit(state.copyWith(
         status: IssueStatus.success,
-        items: issues,
+        items: issues.items,
         hasReachedMax: false,
+        totalItems: issues.totalCount,
       ));
+    } catch (_) {
+      emit(state.copyWith(status: IssueStatus.failure));
+    }
+  }
+
+  // load issue pada page tertentu
+  Future<void> _onIssuePageFetched(
+      GetIssuePageEvent event, Emitter<IssueState> emit) async {
+    if (state.hasReachedMax) return;
+    try {
+      final issues = await _issueRepo.getIssues(query, event.page);
+      emit(issues.items.isEmpty
+          ? state.copyWith(hasReachedMax: true)
+          : state.copyWith(
+          status: IssueStatus.success,
+          items: List.of(state.items)..addAll(issues.items),
+          hasReachedMax: false));
     } catch (_) {
       emit(state.copyWith(status: IssueStatus.failure));
     }
