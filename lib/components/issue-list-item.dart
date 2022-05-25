@@ -4,9 +4,10 @@ import 'package:intl/intl.dart';
 import '../models/issue-response.dart';
 
 class IssueListItem extends StatelessWidget {
-  const IssueListItem({Key? key, required this.item}) : super(key: key);
+  const IssueListItem({Key? key, required this.item, required this.index}) : super(key: key);
 
   final Item item;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +22,7 @@ class IssueListItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(index.toString()),
                 Text(
                   item.title,
                   overflow: TextOverflow.ellipsis,
