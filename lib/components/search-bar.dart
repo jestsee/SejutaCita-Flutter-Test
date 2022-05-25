@@ -27,15 +27,13 @@ class SearchBar extends StatelessWidget {
         onChanged: onChanged,
         onSubmitted: (value) {
           log("submit clicked, value:$value");
-          final issueBloc = BlocProvider.of<IssueBloc>(context);
-          issueBloc.query = value;
+
+          context.read<IssueBloc>().add(GetNewIssueEvent(value));
+
+          // final issueBloc = BlocProvider.of<IssueBloc>(context);
+          // issueBloc.query = value;
 
           // context.read<IssueBloc>().add(IssueFetchedEvent());
-
-          // BlocProvider(
-          //   create: (context) =>
-          //       IssueBloc(IssueRepo(), value)..add(IssueFetchedEvent()),
-          // );
         },
         decoration: const InputDecoration(
           suffixIcon: Icon(Icons.search),

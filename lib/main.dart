@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.amber,
       ),
       home: BlocProvider<IssueBloc>(
-        create: (context) => IssueBloc(IssueRepo(), "doraemon")..add(IssueFetchedEvent()),
+        create: (context) => IssueBloc(IssueRepo(), "doraemon")..add(GetNewIssueEvent("doraemon")),
         child: HomeScreen(),
       ),
     );

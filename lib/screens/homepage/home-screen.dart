@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
     double currentScroll = _scrollController.position.pixels;
 
     if (currentScroll == maxScroll && !bottomHit) {
-      context.read<IssueBloc>().add(IssueFetchedEvent());
+      context.read<IssueBloc>().add(GetIssueEvent());
       bottomHit = true;
     } else {
       Future.delayed(const Duration(milliseconds: 1200), () {
