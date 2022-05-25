@@ -14,12 +14,12 @@ const throttleDuration = Duration(milliseconds: 100);
 
 class IssueBloc extends Bloc<IssueEvent, IssueState> {
   final IssueRepo _issueRepo;
-  // final String query;
+  final String query;
 
-  String query = "doraemon"; // TODO
+  // String query = "doraemon"; // TODO
 
   // initial state
-  IssueBloc(this._issueRepo) : super(const IssueState()) {
+  IssueBloc(this._issueRepo, this.query) : super(const IssueState()) {
     on<IssueFetchedEvent>(_onIssueFetched);
   }
 

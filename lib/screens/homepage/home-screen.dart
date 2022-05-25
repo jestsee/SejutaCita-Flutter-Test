@@ -1,12 +1,9 @@
-import 'dart:developer';
-
 import "package:flutter/material.dart";
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sejuta_cita_test/bloc/issue_bloc.dart';
-import 'package:sejuta_cita_test/models/issue-response.dart';
-import 'package:sejuta_cita_test/repository/issue-repository.dart';
 
-import 'home-body.dart';
+import '../../components/bottom-loader.dart';
+import '../../components/issue-list-item.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -29,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("TEST"),
+        title: const Text("TEST"),
       ),
       body: BlocBuilder<IssueBloc, IssueState>(
         builder: (context, state) {
@@ -76,40 +73,5 @@ class _HomeScreenState extends State<HomeScreen> {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.offset;
     return currentScroll >= (maxScroll * 0.9);
-  }
-}
-
-class BottomLoader extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: SizedBox(
-        height: 24,
-        width: 24,
-        child: CircularProgressIndicator(strokeWidth: 1.5),
-      ),
-    );
-  }
-}
-
-class IssueListItem extends StatelessWidget {
-  const IssueListItem({Key? key, required this.item}) : super(key: key);
-
-  final Item item;
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: ListTile(
-          title: Row(
-            children: [
-              Column(
-                children: [Text(item.title)],
-              )
-            ],
-          )),
-    );
   }
 }
