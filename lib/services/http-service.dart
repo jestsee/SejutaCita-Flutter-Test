@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
@@ -8,12 +10,15 @@ class HttpService {
     Response resp;
     final url = Uri.parse("$base_URL$endPoint");
 
-    try {
-      resp = await get(url);
-    } on Exception catch (e) {
-      rethrow;
-    }
+    log("URL: $url");
 
-    return resp;
+    return Future.delayed(const Duration(seconds: 1), () async {
+      try {
+        resp = await get(url);
+      } on Exception catch (e) {
+        rethrow;
+      }
+      return resp;
+    });
   }
 }

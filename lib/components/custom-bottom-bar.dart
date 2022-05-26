@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/issue_bloc.dart';
 
 class CustomBottomBar extends StatelessWidget {
+  final int max = 5;
   const CustomBottomBar({Key? key}) : super(key: key);
 
   @override
@@ -16,8 +17,8 @@ class CustomBottomBar extends StatelessWidget {
         // log("division result: $totalItems");
 
         List<Widget> indexes = [];
-        if (totalItems > 3) {
-          for (int i = 0; i < 3; i++) {
+        if (totalItems > max) {
+          for (int i = 0; i < max; i++) {
             indexes.add(indexNumber(
                 // TODO harus bikin event baru kah?
                 i + 1,
