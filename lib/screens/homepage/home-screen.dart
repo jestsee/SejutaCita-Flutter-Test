@@ -9,6 +9,7 @@ import 'package:sejuta_cita_test/constants.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../components/bottom-loader.dart';
+import '../../components/custom-app-bar.dart';
 import '../../components/custom-bar.dart';
 import '../../components/custom-bottom-bar.dart';
 import '../../components/issue-list-item.dart';
@@ -50,12 +51,10 @@ class _HomeScreenState extends State<HomeScreen> {
       body: NestedScrollView(
         // controller: _scrollController,
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          SliverAppBar(
-            title: SearchBar(),
-            centerTitle: true,
+          CustomAppBar(
             bottom: CustomBar(
               lazyPress: () {
-                Utils.scrollToIndex(25, _scrollController); // TODO
+                // TODO
               },
               indexPress: () {
                 int page = (_currentIndex / Constant.LIMIT).ceil();
@@ -84,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   controller: _scrollController,
                   itemBuilder: (context, index) {
                     if (!correctIndex) {
-                      Future.delayed(const Duration(milliseconds: 500), () {
+                      Future.delayed(const Duration(milliseconds: 200), () {
                         Utils.scrollToIndex((state.currentPage - 1) * Constant.LIMIT,
                             _scrollController);
                         correctIndex = true;

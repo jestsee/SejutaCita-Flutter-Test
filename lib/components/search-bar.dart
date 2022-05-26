@@ -6,36 +6,59 @@ import 'package:sejuta_cita_test/bloc/issue_bloc.dart';
 
 import '../repository/issue-repository.dart';
 
-class SearchBar extends StatelessWidget {
+class SearchBar extends StatefulWidget {
   const SearchBar({Key? key}) : super(key: key);
+
+  @override
+  State<SearchBar> createState() => _SearchBarState();
+}
+
+class _SearchBarState extends State<SearchBar> {
+  bool isEmpty = true;
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
       width: .8 * size.width,
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      // margin: EdgeInsets.symmetric(vertical: 18),
       decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0),
-          border: Border.all(color: Colors.white, width: 2),
-          borderRadius: BorderRadius.circular(10)),
-      child: TextField(
-        style: const TextStyle(color: Colors.white),
-        onSubmitted: (value) {
-          log("submit clicked, value:$value");
-          context.read<IssueBloc>().add(GetNewIssueEvent(value));
-        },
-        decoration: const InputDecoration(
-          suffixIcon: Icon(Icons.search),
-          hintText: "Search",
-          hintStyle: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w700,
-            fontSize: 12,
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: TextField(
+          textAlignVertical: TextAlignVertical.center,
+          style: const TextStyle(color: Colors.black),
+          onSubmitted: (value) {
+            isEmpty = value == '';
+            if(!isEmpty) {
+              log("submit clicked, value:$value");
+              context.read<IssueBloc>().add(GetNewIssueEvent(value));
+            } else {
+              final snackBar = SnackBar(
+                content: const Text("Field can't be empty"),
+                backgroundColor: (Colors.black),
+                action: SnackBarAction(
+                  label: 'dismiss',
+                  onPressed: () {
+                  },
+                ),
+              );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            }
+          },
+          decoration: InputDecoration(
+            suffixIcon: Icon(Icons.search),
+            hintText: "Search",
+            hintStyle: TextStyle(
+              color: Colors.grey,
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
+            ),
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.symmetric(horizontal: 5),
           ),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(horizontal: 5),
         ),
       ),
     );

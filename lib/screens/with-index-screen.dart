@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sejuta_cita_test/bloc/issue_bloc.dart';
+import 'package:sejuta_cita_test/components/custom-app-bar.dart';
 import 'package:sejuta_cita_test/components/search-bar.dart';
 import 'package:sejuta_cita_test/constants.dart';
 import 'package:sejuta_cita_test/screens/homepage/home-screen.dart';
@@ -30,9 +31,7 @@ class _IndexScreenState extends State<IndexScreen> {
       body: NestedScrollView(
         // controller: _scrollController,
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          SliverAppBar(
-              title: SearchBar(),
-              centerTitle: true,
+          CustomAppBar(
               bottom: CustomBar(indexPress: () {
                 // TODO bikin biar gabisa dipencet
               }, lazyPress: () {

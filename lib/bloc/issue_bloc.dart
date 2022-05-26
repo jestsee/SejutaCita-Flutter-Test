@@ -30,7 +30,7 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
       GetIssueEvent event, Emitter<IssueState> emit) async {
     if (state.hasReachedMax) return;
     try {
-      int page = state.items.length ~/ 30;
+      int page = state.items.length ~/ Constant.LIMIT;
       log("page: $page");
 
       final issues = await _issueRepo.getIssues(query, page + 1);
