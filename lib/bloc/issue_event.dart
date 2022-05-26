@@ -21,10 +21,10 @@ class GetIssueEvent extends IssueEvent {
 }
 
 // load issue pada page tertentu
-class GetIssuePageEvent extends IssueEvent {
+class GetIssueIndexEvent extends IssueEvent {
   final int page;
 
-  const GetIssuePageEvent(this.page);
+  const GetIssueIndexEvent(this.page);
 
   @override
   List<Object?> get props => [page];

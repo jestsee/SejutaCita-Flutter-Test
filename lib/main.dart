@@ -14,15 +14,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primaryColor: Colors.white,
-        scaffoldBackgroundColor: Colors.amber,
-      ),
-      home: BlocProvider<IssueBloc>(
-        create: (context) => IssueBloc(IssueRepo(), "doraemon")..add(GetNewIssueEvent("doraemon")),
-        child: HomeScreen(),
+    return BlocProvider(
+      create: (context) =>
+          IssueBloc(IssueRepo(), "doraemon")..add(GetNewIssueEvent("doraemon")),
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primaryColor: Colors.white,
+          scaffoldBackgroundColor: Colors.amber,
+        ),
+        home: HomeScreen(),
       ),
     );
   }

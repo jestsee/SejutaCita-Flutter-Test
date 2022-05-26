@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sejuta_cita_test/bloc/issue_bloc.dart';
 import 'package:sejuta_cita_test/components/search-bar.dart';
@@ -7,6 +7,7 @@ import '../../components/bottom-loader.dart';
 import '../../components/custom-bar.dart';
 import '../../components/custom-bottom-bar.dart';
 import '../../components/issue-list-item.dart';
+import '../with-index-screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -17,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _scrollController = ScrollController();
+
   // late IssueBloc issueBloc;
   bool bottomHit = false;
 
@@ -33,11 +35,20 @@ class _HomeScreenState extends State<HomeScreen> {
         // controller: _scrollController,
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           SliverAppBar(
-            title: SearchBar(onChanged: (String value) {  },),
+            title: SearchBar(),
             centerTitle: true,
-            bottom: CustomBar(),
+            bottom: CustomBar(
+              lazyPress: () {},
+              indexPress: () {
+                context.read<IssueBloc>().add(GetIssueIndexEvent(-1));
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => IndexScreen()),
+                );
+              },
+            ),
           )
-        ], body: BlocBuilder<IssueBloc, IssueState>(
+        ],
+        body: BlocBuilder<IssueBloc, IssueState>(
           builder: (context, state) {
             switch (state.status) {
               case IssueStatus.failure:
@@ -54,7 +65,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemBuilder: (context, index) {
                     return index >= state.items.length
                         ? BottomLoader()
-                        : IssueListItem(item: state.items[index], index: index+1,);
+                        : IssueListItem(
+                            item: state.items[index],
+                            index: index + 1,
+                          );
                   },
                 );
               default:
@@ -63,7 +77,6 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
       ),
-      bottomNavigationBar: CustomBottomBar(),
     );
   }
 
@@ -88,12 +101,5 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
     // if (_isBottom) context.read<IssueBloc>().add(IssueFetchedEvent());
-  }
-
-  bool get _isBottom {
-    if (!_scrollController.hasClients) return false;
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.offset;
-    return currentScroll >= (maxScroll * 0.9);
   }
 }

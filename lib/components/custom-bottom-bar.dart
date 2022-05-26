@@ -21,17 +21,17 @@ class CustomBottomBar extends StatelessWidget {
             indexes.add(indexNumber(
                 // TODO harus bikin event baru kah?
                 i + 1,
-                () => context.read<IssueBloc>().add(GetIssuePageEvent(i + 1))));
+                () => context.read<IssueBloc>().add(GetIssueIndexEvent(i + 1))));
           }
           indexes.add(indexNumber(
               totalItems,
               () => context
                   .read<IssueBloc>()
-                  .add(GetIssuePageEvent(totalItems))));
+                  .add(GetIssueIndexEvent(totalItems))));
         } else {
           for (int i = 0; i < totalItems; i++) {
             indexes.add(indexNumber(i + 1,
-                () => context.read<IssueBloc>().add(GetIssuePageEvent(i + 1))));
+                () => context.read<IssueBloc>().add(GetIssueIndexEvent(i + 1))));
           }
         }
 
