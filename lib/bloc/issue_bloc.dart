@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:sejuta_cita_test/constants.dart';
 import 'package:sejuta_cita_test/models/issue-response.dart';
 import 'package:sejuta_cita_test/repository/issue-repository.dart';
 
@@ -28,10 +29,10 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
       GetIssueEvent event, Emitter<IssueState> emit) async {
     if (state.hasReachedMax) return;
     try {
-      int page = state.items.length~/30;
+      int page = state.items.length ~/ 30;
       log("page: $page");
 
-      final issues = await _issueRepo.getIssues(query, page+1);
+      final issues = await _issueRepo.getIssues(query, page + 1);
       emit(issues.items.isEmpty
           ? state.copyWith(hasReachedMax: true)
           : state.copyWith(
@@ -58,7 +59,8 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
       emit(state.copyWith(
         status: IssueStatus.success,
         items: issues.items,
-        slicedItems: issues.items, // ambil semuanya
+        slicedItems: issues.items,
+        // ambil semuanya
         hasReachedMax: false,
         totalItems: issues.totalCount,
       ));
@@ -68,30 +70,44 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
   }
 
   // load issue pada page tertentu
-  // kalo datanya udah tersedia ga perlu fetch dari api lagi
   Future<void> _onIssuePageFetched(
       GetIssueIndexEvent event, Emitter<IssueState> emit) async {
-
     if (state.hasReachedMax) return;
 
     // tinggal convert aja dari lazy ke index
     if (event.page == -1) {
       log("masuk event page = -1");
       emit(state.copyWith(
-        items: state.items,
-        slicedItems: state.items,
-        status: IssueStatus.success
-      ));
-    } else {
+          items: state.items,
+          slicedItems: state.items,
+          status: IssueStatus.success));
+    }
+
+    // kalo datanya udah tersedia ga perlu fetch dari api lagi
+    else {
+      emit(state.copyWith(status: IssueStatus.loading));
+
+      // TODO cek apakah data sudah tersedia
+      // ...
+
+      // fetch dari API
       try {
         final issues = await _issueRepo.getIssues(query, event.page);
+        int _endAt = event.page * Constant.LIMIT;
+
+        log("startAt: ${_endAt-Constant.LIMIT}");
+        var tempList = List.of(state.items)..addAll(issues.items);
+        var tempSlicedList = tempList.sublist(_endAt-Constant.LIMIT,_endAt);
+
         emit(issues.items.isEmpty
             ? state.copyWith(hasReachedMax: true)
             : state.copyWith(
-            status: IssueStatus.success,
-            items: List.of(state.items)..addAll(issues.items),
-            slicedItems: List.of(state.items)..addAll(issues.items),
-            hasReachedMax: false));
+                status: IssueStatus.success,
+                items: tempList,
+                slicedItems: tempSlicedList,
+                hasReachedMax: false,
+                endAt: event.page * Constant.LIMIT,
+              ));
       } catch (_) {
         emit(state.copyWith(status: IssueStatus.failure));
       }

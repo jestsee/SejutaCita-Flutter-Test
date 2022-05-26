@@ -6,7 +6,8 @@ class IssueState extends Equatable {
   const IssueState(
       {this.status = IssueStatus.initial,
       this.items = const <Item>[],
-      this.totalItems = 0,
+      this.totalItems = -1,
+      this.startAt = -1,
       this.hasReachedMax = false,
       this.slicedItems = const <Item>[]});
 
@@ -14,6 +15,7 @@ class IssueState extends Equatable {
   final List<Item> items;
   final List<Item> slicedItems;
   final int totalItems;
+  final int startAt;
   final bool hasReachedMax;
 
   IssueState copyWith({
@@ -21,6 +23,7 @@ class IssueState extends Equatable {
     List<Item>? items,
     List<Item>? slicedItems,
     int? totalItems,
+    int? endAt,
     bool? hasReachedMax,
   }) {
     return IssueState(
@@ -28,6 +31,7 @@ class IssueState extends Equatable {
       items: items ?? this.items,
       slicedItems: slicedItems ?? this.slicedItems,
       totalItems: totalItems ?? this.totalItems,
+      startAt: endAt ?? this.startAt,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );
   }
@@ -38,5 +42,5 @@ class IssueState extends Equatable {
   }
 
   @override
-  List<Object> get props => [status, items, totalItems, hasReachedMax];
+  List<Object> get props => [status, items, slicedItems, totalItems, startAt, hasReachedMax];
 }

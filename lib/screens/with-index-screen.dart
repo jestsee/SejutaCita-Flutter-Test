@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sejuta_cita_test/bloc/issue_bloc.dart';
 import 'package:sejuta_cita_test/components/search-bar.dart';
+import 'package:sejuta_cita_test/constants.dart';
 import 'package:sejuta_cita_test/screens/homepage/home-screen.dart';
 
 import '../../components/bottom-loader.dart';
@@ -31,7 +32,7 @@ class _IndexScreenState extends State<IndexScreen> {
               title: SearchBar(),
               centerTitle: true,
               bottom: CustomBar(indexPress: () {
-                // TODO gabisa dipencet
+                // TODO bikin biar gabisa dipencet
               }, lazyPress: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -44,12 +45,12 @@ class _IndexScreenState extends State<IndexScreen> {
               case IssueStatus.failure:
                 return const Center(child: Text('failed to fetch posts'));
               case IssueStatus.success:
-                log("build ulang");
+                // log("build ulang");
                 if (state.items.isEmpty) {
                   return const Center(child: Text('no issues'));
                 }
                 return ListView.builder(
-                  itemCount: state.slicedItems.length,
+                  itemCount: Constant.LIMIT,
                   itemBuilder: (context, index) {
                     return index >= state.slicedItems.length
                         ? BottomLoader()

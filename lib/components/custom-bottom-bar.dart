@@ -13,7 +13,7 @@ class CustomBottomBar extends StatelessWidget {
     return BlocBuilder<IssueBloc, IssueState>(
       builder: (context, state) {
         int totalItems = (state.totalItems / 30).ceil();
-        log("division result: $totalItems");
+        // log("division result: $totalItems");
 
         List<Widget> indexes = [];
         if (totalItems > 3) {
