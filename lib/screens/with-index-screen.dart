@@ -34,6 +34,7 @@ class _IndexScreenState extends State<IndexScreen> {
               bottom: CustomBar(indexPress: () {
                 // TODO bikin biar gabisa dipencet
               }, lazyPress: () {
+
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => HomeScreen()),
                 );

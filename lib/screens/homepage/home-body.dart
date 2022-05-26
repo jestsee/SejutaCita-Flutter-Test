@@ -11,7 +11,6 @@ class HomeBody extends StatelessWidget {
       child: Column(
         children: <Widget>[
           SearchBar(
-              onChanged: (value) {}
           )
         ],
       ),

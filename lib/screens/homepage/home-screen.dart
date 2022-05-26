@@ -1,12 +1,17 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sejuta_cita_test/bloc/issue_bloc.dart';
 import 'package:sejuta_cita_test/components/search-bar.dart';
+import 'package:sejuta_cita_test/constants.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../components/bottom-loader.dart';
 import '../../components/custom-bar.dart';
 import '../../components/custom-bottom-bar.dart';
 import '../../components/issue-list-item.dart';
+import '../../models/issue-response.dart';
 import '../with-index-screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,6 +23,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _scrollController = ScrollController();
+  int _currentIndex = 0;
 
   // late IssueBloc issueBloc;
   bool bottomHit = false;
@@ -26,6 +32,16 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+  }
+  
+  int itemCounter(List<Item> items) {
+    int counter = 30;
+    
+    if(items[counter].state != "unknown") {
+      counter += 30;
+    }
+    
+    return counter;
   }
 
   @override
@@ -40,7 +56,9 @@ class _HomeScreenState extends State<HomeScreen> {
             bottom: CustomBar(
               lazyPress: () {},
               indexPress: () {
-                context.read<IssueBloc>().add(GetIssueIndexEvent(-1));
+                int idx = (_currentIndex/Constant.LIMIT).ceil();
+                log("LAZY -> INDEX: $idx");
+                context.read<IssueBloc>().add(GetIssueIndexEvent(idx));
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => IndexScreen()),
                 );
@@ -58,17 +76,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   return const Center(child: Text('no issues'));
                 }
                 return ListView.builder(
-                  itemCount: state.hasReachedMax
-                      ? state.items.length
-                      : state.items.length + 1,
+                  itemCount: 
+                    state.hasReachedMax ? state.items.length 
+                        : /*itemCounter(state.items)*/state.items.length + 1,
                   controller: _scrollController,
                   itemBuilder: (context, index) {
-                    return index >= state.items.length
-                        ? BottomLoader()
-                        : IssueListItem(
-                            item: state.items[index],
-                            index: index + 1,
-                          );
+                    return VisibilityDetector(
+                        key: Key(index.toString()),
+                        onVisibilityChanged: (VisibilityInfo info) {
+                          setState(() {
+                            _currentIndex = index;
+                            log('CURRENT ITEM: $_currentIndex');
+                          });
+                        },
+                        child: index >= state.items.length
+                            ? BottomLoader()
+                            : IssueListItem(
+                          item: state.items[index],
+                          index: index + 1,
+                        ),
+                    );
                   },
                 );
               default:
