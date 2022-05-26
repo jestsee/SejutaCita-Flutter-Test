@@ -12,7 +12,7 @@ class HttpService {
 
     log("URL: $url");
 
-    return Future.delayed(const Duration(seconds: 1), () async {
+    return Future.delayed(const Duration(milliseconds: 500), () async {
       try {
         resp = await get(url);
       } on Exception catch (e) {

@@ -19,9 +19,10 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
 
   // initial state
   IssueBloc(this._issueRepo, this.query) : super(const IssueState()) {
-    on<GetIssueEvent>(_onIssueFetched);
+    on<GetIssueEvent>(_onIssueFetched); // TODO hapus aja kayaknya
     on<GetNewIssueEvent>(_onNewIssueFetched);
     on<GetIssueIndexEvent>(_onIssuePageFetched);
+    on<IndexToLazyEvent>(_onIndexToLazy);
   }
 
   // melanjutkan dari query yang sudah ada
@@ -73,83 +74,68 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
       GetIssueIndexEvent event, Emitter<IssueState> emit) async {
     if (state.hasReachedMax) return;
 
-    // TODO tinggal convert aja dari lazy ke index
-    if (event.page == -1) {
-      log("masuk event page = -1");
+    emit(state.copyWith(status: IssueStatus.loading));
+    int _endAt = event.page * Constant.LIMIT;
+    int _startAt = _endAt - Constant.LIMIT;
 
-      // track dulu sekarang lagi di index berapa
-      // ...
-
+    // data sudah tersedia
+    if (_endAt <= state.items.length &&
+        state.items[_startAt].state != "unknown" &&
+        state.items[_endAt - 1].state != "unknown") {
       emit(state.copyWith(
-          items: state.items,
-          slicedItems: state.items, // TODO di-slice berdasarkan index berapa
-          status: IssueStatus.success));
+          status: IssueStatus.success,
+          slicedItems: state.items.sublist(_startAt, _endAt),
+          currentPage: event.page));
     }
 
-    // kalo datanya udah tersedia ga perlu fetch dari api lagi
+    // data belum tersedia ; fetch dari API
     else {
-      emit(state.copyWith(status: IssueStatus.loading));
-      int _endAt = event.page * Constant.LIMIT;
-      int _startAt = _endAt - Constant.LIMIT;
+      try {
+        final issues = await _issueRepo.getIssues(query, event.page);
+        var tempList = List.of(state.items);
 
-      // data sudah tersedia
-      if (_endAt <= state.items.length
-          && state.items[_startAt].state != "unknown"
-          && state.items[_endAt-1].state != "unknown"
-      ) {
-        emit(state.copyWith(
-            status: IssueStatus.success,
-            slicedItems: state.items.sublist(_startAt, _endAt)));
-      }
-
-      // data belum tersedia ; fetch dari API
-      else {
-        try {
-          final issues = await _issueRepo.getIssues(query, event.page);
-          var tempList = List.of(state.items);
-
-          // menangani indeks yang loncat / ga berurut
-          // isi dulu bolongnya
-          while (tempList.length < _startAt) {
-            tempList.add(Item(
-                title: "unknown",
-                state: "unknown",
-                createdAt: DateTime.utc(0),
-                updatedAt: DateTime.utc(0)
-            ));
-          }
-
-          // baru tambahin hasil fetch
-          tempList.addAll(issues.items);
-
-          // replace unknown data
-          if (tempList[_startAt].state == "unknown"
-              && tempList[_endAt-1].state == "unknown") {
-            log("masuk replace data baru");
-            tempList.replaceRange(_startAt, _endAt, issues.items);
-          }
-
-          var tempSlicedList =
-              tempList.sublist(_endAt - Constant.LIMIT, _endAt);
-
-          log("startAt: $_startAt endAt: $_endAt current length: ${tempList.length}");
-
-          emit(issues.items.isEmpty
-              ? state.copyWith(hasReachedMax: true)
-              : state.copyWith(
-                  status: IssueStatus.success,
-                  items: tempList,
-                  slicedItems: tempSlicedList,
-                  hasReachedMax: false,
-                  endAt: event.page * Constant.LIMIT,
-                ));
-        } catch (e) {
-          log("ERROR: $e");
-          emit(state.copyWith(status: IssueStatus.failure));
+        // menangani indeks yang loncat / ga berurut
+        // isi dulu bolongnya
+        while (tempList.length < _startAt) {
+          tempList.add(Item(
+              title: "unknown",
+              state: "unknown",
+              createdAt: DateTime.utc(0),
+              updatedAt: DateTime.utc(0)));
         }
-      }
 
-      // TODO bisa dikeluarin emitnya, tinggal persoalan perlu fetch lagi apa ngga
+        // baru tambahin hasil fetch
+        tempList.addAll(issues.items);
+
+        // replace unknown data
+        if (tempList[_startAt].state == "unknown" &&
+            tempList[_endAt - 1].state == "unknown") {
+          log("masuk replace data baru");
+          tempList.replaceRange(_startAt, _endAt, issues.items);
+        }
+
+        var tempSlicedList = tempList.sublist(_endAt - Constant.LIMIT, _endAt);
+
+        log("startAt: $_startAt endAt: $_endAt current length: ${tempList.length}");
+
+        emit(issues.items.isEmpty
+            ? state.copyWith(hasReachedMax: true)
+            : state.copyWith(
+                status: IssueStatus.success,
+                items: tempList,
+                slicedItems: tempSlicedList,
+                hasReachedMax: false,
+              ));
+      } catch (e) {
+        log("ERROR: $e");
+        emit(state.copyWith(status: IssueStatus.failure));
+      }
     }
+  }
+
+  // pindah dari index ke lazy
+  Future<void> _onIndexToLazy(
+      IndexToLazyEvent event, Emitter<IssueState> emit) async {
+    emit(state.copyWith(currentIdx: event.idx, currentPage: event.page));
   }
 }

@@ -21,6 +21,8 @@ class IndexScreen extends StatefulWidget {
 
 class _IndexScreenState extends State<IndexScreen> {
   bool bottomHit = false;
+  late int _page;
+  late int _idx;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,7 @@ class _IndexScreenState extends State<IndexScreen> {
               bottom: CustomBar(indexPress: () {
                 // TODO bikin biar gabisa dipencet
               }, lazyPress: () {
-
+                context.read<IssueBloc>().add(IndexToLazyEvent(_page, 1));
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => HomeScreen()),
                 );
@@ -42,10 +44,14 @@ class _IndexScreenState extends State<IndexScreen> {
         ],
         body: BlocBuilder<IssueBloc, IssueState>(
           builder: (context, state) {
+            _page = state.currentPage;
+            _idx = state.currentIdx;
             switch (state.status) {
+
               case IssueStatus.failure:
                 return const Center(child: Text('failed to fetch posts'));
-              case IssueStatus.success:
+
+                case IssueStatus.success:
                 // log("build ulang");
                 if (state.items.isEmpty) {
                   return const Center(child: Text('no issues'));
@@ -61,6 +67,7 @@ class _IndexScreenState extends State<IndexScreen> {
                           );
                   },
                 );
+
               default:
                 return const Center(child: CircularProgressIndicator());
             }

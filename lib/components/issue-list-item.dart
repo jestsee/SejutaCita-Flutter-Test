@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sejuta_cita_test/constants.dart';
 
 import '../models/issue-response.dart';
 
@@ -12,8 +13,8 @@ class IssueListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    return Container(
+      height: Constant.listTileHeight, // TODO nanti ganti
       child: ListTile(
           title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

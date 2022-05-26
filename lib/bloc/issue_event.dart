@@ -14,6 +14,7 @@ class GetNewIssueEvent extends IssueEvent {
   List<Object?> get props => [query];
 }
 
+// TODO hapus aja kayaknya
 // load issue dengan query yang sudah ada
 class GetIssueEvent extends IssueEvent {
   @override
@@ -28,4 +29,15 @@ class GetIssueIndexEvent extends IssueEvent {
 
   @override
   List<Object?> get props => [page];
+}
+
+// pindah dari index ke lazy
+class IndexToLazyEvent extends IssueEvent {
+  final int page;
+  final int idx;
+
+  const IndexToLazyEvent(this.page, this.idx);
+
+  @override
+  List<Object?> get props => [page, idx];
 }
