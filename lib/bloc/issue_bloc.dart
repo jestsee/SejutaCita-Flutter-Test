@@ -63,6 +63,7 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
         // ambil semuanya
         hasReachedMax: false,
         totalItems: issues.totalCount,
+        currentPage: 1
       ));
     } catch (_) {
       emit(state.copyWith(status: IssueStatus.failure));
@@ -124,6 +125,7 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
                 status: IssueStatus.success,
                 items: tempList,
                 slicedItems: tempSlicedList,
+                currentPage: event.page,
                 hasReachedMax: false,
               ));
       } catch (e) {

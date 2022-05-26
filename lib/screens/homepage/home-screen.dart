@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final _scrollController = ScrollController();
   int _currentIndex = 0;
   bool bottomHit = false;
+  bool correctIndex = false;
 
   @override
   void initState() {
@@ -82,17 +83,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       : /*itemCounter(state.items)*/ state.items.length + 1,
                   controller: _scrollController,
                   itemBuilder: (context, index) {
-
-                      log('INDEX LAZY: ${state.currentPage}');
-
-                    // Utils.scrollToIndex(state.currentPage * Constant.LIMIT, _scrollController);
+                    if (!correctIndex) {
+                      Future.delayed(const Duration(milliseconds: 500), () {
+                        Utils.scrollToIndex((state.currentPage - 1) * Constant.LIMIT,
+                            _scrollController);
+                        correctIndex = true;
+                      });
+                    }
 
                     return VisibilityDetector(
                       key: Key(index.toString()),
                       onVisibilityChanged: (VisibilityInfo info) {
                         setState(() {
                           _currentIndex = index;
-                          log('CURRENT IDX: $_currentIndex');
+                          // log('CURRENT IDX: $_currentIndex');
                         });
                       },
                       child: index >= state.items.length

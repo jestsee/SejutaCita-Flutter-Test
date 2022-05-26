@@ -36,6 +36,7 @@ class _IndexScreenState extends State<IndexScreen> {
               bottom: CustomBar(indexPress: () {
                 // TODO bikin biar gabisa dipencet
               }, lazyPress: () {
+                log('INDEX -> LAZY: $_page');
                 context.read<IssueBloc>().add(IndexToLazyEvent(_page, 1));
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -47,11 +48,10 @@ class _IndexScreenState extends State<IndexScreen> {
             _page = state.currentPage;
             _idx = state.currentIdx;
             switch (state.status) {
-
               case IssueStatus.failure:
                 return const Center(child: Text('failed to fetch posts'));
 
-                case IssueStatus.success:
+              case IssueStatus.success:
                 // log("build ulang");
                 if (state.items.isEmpty) {
                   return const Center(child: Text('no issues'));
