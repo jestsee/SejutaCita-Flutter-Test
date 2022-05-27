@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sejuta_cita_test/bloc/issue_bloc.dart';
+import 'package:sejuta_cita_test/components/list-items/repository-list-item.dart';
 import 'package:sejuta_cita_test/components/utils.dart';
 import 'package:sejuta_cita_test/constants.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -10,7 +11,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 import '../components/bottom-loader.dart';
 import '../components/custom-app-bar.dart';
 import '../components/custom-bar.dart';
-import '../components/issue-list-item.dart';
+import '../components/list-items/issue-list-item.dart';
 import '../models/issue-response.dart';
 import 'with-index-screen.dart';
 
@@ -40,7 +41,7 @@ class _LazyScreenState extends State<LazyScreen> {
                 // TODO
               },
               indexPress: () {
-                int page = (_currentIndex / Constant.LIMIT).ceil();
+                int page = (_currentIndex / Constant.limit).ceil();
                 log("LAZY -> INDEX: $page");
                 context.read<IssueBloc>().add(GetIssueIndexEvent(page));
                 Navigator.of(context).push(
@@ -71,7 +72,7 @@ class _LazyScreenState extends State<LazyScreen> {
                     if (!correctIndex) {
                       Future.delayed(const Duration(milliseconds: 200), () {
                         Utils.scrollToIndex(
-                            (state.currentPage - 1) * Constant.LIMIT,
+                            (state.currentPage - 1) * Constant.limit,
                             _scrollController);
                         correctIndex = true;
                       });
@@ -87,10 +88,7 @@ class _LazyScreenState extends State<LazyScreen> {
                       },
                       child: index >= state.items.length
                           ? BottomLoader()
-                          : IssueListItem(
-                              item: state.items[index],
-                              index: index + 1,
-                            ),
+                          : Utils.widgetDecider(state.items[index], index),
                     );
                   },
                 );

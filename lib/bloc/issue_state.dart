@@ -9,9 +9,9 @@ class IssueState<T> extends Equatable {
       this.currentPage = 1,
       this.currentIdx = 1,
       this.hasReachedMax = false,
+      this.type = SearchType.unknown,
       required this.items,
-      required this.slicedItems
-      });
+      required this.slicedItems});
 
   final IssueStatus status;
   final List<T> items;
@@ -20,16 +20,17 @@ class IssueState<T> extends Equatable {
   final int currentPage;
   final int currentIdx;
   final bool hasReachedMax;
+  final SearchType type;
 
-  IssueState copyWith({
-    IssueStatus? status,
-    List<T>? items,
-    List<T>? slicedItems,
-    int? totalItems,
-    int? currentPage,
-    int? currentIdx,
-    bool? hasReachedMax,
-  }) {
+  IssueState copyWith(
+      {IssueStatus? status,
+      List<T>? items,
+      List<T>? slicedItems,
+      int? totalItems,
+      int? currentPage,
+      int? currentIdx,
+      bool? hasReachedMax,
+      SearchType? type}) {
     return IssueState(
       status: status ?? this.status,
       items: items ?? this.items,
@@ -38,6 +39,7 @@ class IssueState<T> extends Equatable {
       currentPage: currentPage ?? this.currentPage,
       currentIdx: currentIdx ?? this.currentIdx,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+      type: type ?? this.type,
     );
   }
 
@@ -47,5 +49,14 @@ class IssueState<T> extends Equatable {
   }
 
   @override
-  List<Object> get props => [status, items, slicedItems, totalItems, currentPage, currentIdx, hasReachedMax];
+  List<Object> get props => [
+        status,
+        items,
+        slicedItems,
+        totalItems,
+        currentPage,
+        currentIdx,
+        hasReachedMax,
+        type
+      ];
 }

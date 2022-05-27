@@ -3,6 +3,7 @@ import 'dart:developer';
 import "package:flutter/material.dart";
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sejuta_cita_test/bloc/issue_bloc.dart';
+import 'package:sejuta_cita_test/constants.dart';
 
 import '../repository/issue-repository.dart';
 
@@ -23,8 +24,7 @@ class _SearchBarState extends State<SearchBar> {
       width: .8 * size.width,
       // margin: EdgeInsets.symmetric(vertical: 18),
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(30)),
+          color: Colors.white, borderRadius: BorderRadius.circular(30)),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: TextField(
@@ -32,7 +32,7 @@ class _SearchBarState extends State<SearchBar> {
           style: const TextStyle(color: Colors.black),
           onSubmitted: (value) {
             isEmpty = value == '';
-            if(!isEmpty) {
+            if (!isEmpty) {
               log("submit clicked, value:$value");
               context.read<IssueBloc>().add(GetNewIssueEvent(value));
             } else {
@@ -40,15 +40,14 @@ class _SearchBarState extends State<SearchBar> {
                 content: const Text("Field can't be empty"),
                 backgroundColor: (Colors.black),
                 action: SnackBarAction(
-                  label: 'dismiss',
-                  onPressed: () {
-                  },
+                  label: 'Dismiss',
+                  onPressed: () {},
                 ),
               );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
             }
           },
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             suffixIcon: Icon(Icons.search),
             hintText: "Search",
             hintStyle: TextStyle(
