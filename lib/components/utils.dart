@@ -18,11 +18,11 @@ class Utils {
 
   static Widget widgetDecider(item, int index) {
     if (item is Item) {
-      return IssueListItem(item: item, index: index);
+      return IssueListItem(item: item, index: index+1);
     } else if (item is UserItem) {
-      return UsersListItem(item: item, index: index);
+      return UsersListItem(item: item, index: index+1);
     } else {
-      return RepositoryListItem(item: item, index: index);
+      return RepositoryListItem(item: item, index: index+1);
     }
   }
 }

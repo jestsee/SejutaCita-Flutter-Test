@@ -13,11 +13,11 @@ part 'issue_state.dart';
 
 class IssueBloc<T> extends Bloc<IssueEvent, IssueState> {
   // final _issueRepo = IssueRepo();
-  final Repo _issueRepo;
+  Repo issueRepo;
   String query;
 
   // initial state
-  IssueBloc(this._issueRepo, this.query) : super(const IssueState(slicedItems: [], items: [])) {
+  IssueBloc(this.issueRepo, this.query) : super(const IssueState(slicedItems: [], items: [])) {
     on<GetIssueEvent>(_onIssueFetched); // TODO hapus aja kayaknya
     on<GetNewIssueEvent>(_onNewIssueFetched);
     on<GetIssueIndexEvent>(_onIssuePageFetched);
@@ -29,10 +29,10 @@ class IssueBloc<T> extends Bloc<IssueEvent, IssueState> {
       GetIssueEvent event, Emitter<IssueState> emit) async {
     if (state.hasReachedMax) return;
     try {
-      int page = state.items.length ~/ Constant.LIMIT;
+      int page = state.items.length ~/ Constant.limit;
       log("page: $page");
 
-      final issues = await _issueRepo.getData(query, page + 1);
+      final issues = await issueRepo.getData(query, page + 1);
       emit(issues.items.isEmpty
           ? state.copyWith(hasReachedMax: true)
           : state.copyWith(
@@ -54,14 +54,15 @@ class IssueBloc<T> extends Bloc<IssueEvent, IssueState> {
     try {
       log("masuk initial state new issue");
       query = event.query; // set new query
-      final issues = await _issueRepo.getData(query, 1);
+      final issues = await issueRepo.getData(query, 1);
       emit(state.copyWith(
         status: IssueStatus.success,
         items: issues.items,
         slicedItems: issues.items,
         hasReachedMax: false,
         totalItems: issues.totalCount,
-        currentPage: 1
+        currentPage: 1,
+        // type: event.type
       ));
     } catch (e) {
       log('$e');
@@ -75,13 +76,13 @@ class IssueBloc<T> extends Bloc<IssueEvent, IssueState> {
     if (state.hasReachedMax) return;
 
     emit(state.copyWith(status: IssueStatus.loading));
-    int _endAt = event.page * Constant.LIMIT;
-    int _startAt = _endAt - Constant.LIMIT;
+    int _endAt = event.page * Constant.limit;
+    int _startAt = _endAt - Constant.limit;
 
     // data sudah tersedia
-    if (_endAt <= state.items.length &&
+    if (_endAt <= state.items.length /*&&
         state.items[_startAt].state != "unknown" &&
-        state.items[_endAt - 1].state != "unknown") {
+        state.items[_endAt - 1].state != "unknown"*/) {
       emit(state.copyWith(
           status: IssueStatus.success,
           slicedItems: state.items.sublist(_startAt, _endAt),
@@ -91,7 +92,7 @@ class IssueBloc<T> extends Bloc<IssueEvent, IssueState> {
     // data belum tersedia ; fetch dari API
     else {
       try {
-        final issues = await _issueRepo.getData(query, event.page);
+        final issues = await issueRepo.getData(query, event.page);
         var tempList = List.of(state.items);
 
         // TODO bisa dijadiin fungsi juga parameternya list sama startAt
@@ -106,13 +107,13 @@ class IssueBloc<T> extends Bloc<IssueEvent, IssueState> {
 
         // TODO == unknown ini bisa dijadiin fungsi isUnknown
         // replace unknown data
-        if (tempList[_startAt].state == "unknown" &&
-            tempList[_endAt - 1].state == "unknown") {
-          log("masuk replace data baru");
-          tempList.replaceRange(_startAt, _endAt, issues.items);
-        }
+        // if (tempList[_startAt].state == "unknown" &&
+        //     tempList[_endAt - 1].state == "unknown") {
+        //   log("masuk replace data baru");
+        //   tempList.replaceRange(_startAt, _endAt, issues.items);
+        // }
 
-        var tempSlicedList = tempList.sublist(_endAt - Constant.LIMIT, _endAt);
+        var tempSlicedList = tempList.sublist(_endAt - Constant.limit, _endAt);
 
         log("startAt: $_startAt endAt: $_endAt current length: ${tempList.length}");
 
