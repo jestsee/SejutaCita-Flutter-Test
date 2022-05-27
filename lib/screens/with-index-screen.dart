@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sejuta_cita_test/bloc/issue_bloc.dart';
+import 'package:sejuta_cita_test/bloc/app_bloc.dart';
 import 'package:sejuta_cita_test/components/custom-app-bar.dart';
 import 'package:sejuta_cita_test/components/utils.dart';
 import 'package:sejuta_cita_test/constants.dart';
@@ -36,21 +36,21 @@ class _IndexScreenState extends State<IndexScreen> {
                 // TODO bikin biar gabisa dipencet
               }, lazyPress: () {
                 log('INDEX -> LAZY: $_page');
-                context.read<IssueBloc>().add(IndexToLazyEvent(_page, 1));
+                context.read<AppBloc>().add(IndexToLazyEvent(_page, 1));
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => LazyScreen()),
                 );
               }))
         ],
-        body: BlocBuilder<IssueBloc, IssueState>(
+        body: BlocBuilder<AppBloc, AppState>(
           builder: (context, state) {
             _page = state.currentPage;
             _idx = state.currentIdx;
             switch (state.status) {
-              case IssueStatus.failure:
+              case Status.failure:
                 return const Center(child: Text('failed to fetch posts'));
 
-              case IssueStatus.success:
+              case Status.success:
                 // log("build ulang");
                 if (state.items.isEmpty) {
                   return const Center(child: Text('no issues'));

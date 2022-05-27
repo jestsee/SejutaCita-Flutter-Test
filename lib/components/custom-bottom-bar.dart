@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/issue_bloc.dart';
+import '../bloc/app_bloc.dart';
 
 class CustomBottomBar extends StatelessWidget {
   final int max = 5;
@@ -11,7 +11,7 @@ class CustomBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<IssueBloc, IssueState>(
+    return BlocBuilder<AppBloc, AppState>(
       builder: (context, state) {
         int totalItems = (state.totalItems / 30).ceil();
         // log("division result: $totalItems");
@@ -22,17 +22,17 @@ class CustomBottomBar extends StatelessWidget {
             indexes.add(indexNumber(
                 // TODO harus bikin event baru kah?
                 i + 1,
-                () => context.read<IssueBloc>().add(GetIssueIndexEvent(i + 1))));
+                () => context.read<AppBloc>().add(LoadDataPageEvent(i + 1))));
           }
           indexes.add(indexNumber(
               totalItems,
               () => context
-                  .read<IssueBloc>()
-                  .add(GetIssueIndexEvent(totalItems))));
+                  .read<AppBloc>()
+                  .add(LoadDataPageEvent(totalItems))));
         } else {
           for (int i = 0; i < totalItems; i++) {
             indexes.add(indexNumber(i + 1,
-                () => context.read<IssueBloc>().add(GetIssueIndexEvent(i + 1))));
+                () => context.read<AppBloc>().add(LoadDataPageEvent(i + 1))));
           }
         }
 

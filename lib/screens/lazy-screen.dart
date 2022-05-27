@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sejuta_cita_test/bloc/issue_bloc.dart';
+import 'package:sejuta_cita_test/bloc/app_bloc.dart';
 import 'package:sejuta_cita_test/components/list-items/repository-list-item.dart';
 import 'package:sejuta_cita_test/components/utils.dart';
 import 'package:sejuta_cita_test/constants.dart';
@@ -43,7 +43,7 @@ class _LazyScreenState extends State<LazyScreen> {
               indexPress: () {
                 int page = (_currentIndex / Constant.limit).ceil();
                 log("LAZY -> INDEX: $page");
-                context.read<IssueBloc>().add(GetIssueIndexEvent(page));
+                context.read<AppBloc>().add(LoadDataPageEvent(page));
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => IndexScreen()),
                 );
@@ -51,15 +51,15 @@ class _LazyScreenState extends State<LazyScreen> {
             ),
           )
         ],
-        body: BlocBuilder<IssueBloc, IssueState>(
+        body: BlocBuilder<AppBloc, AppState>(
           builder: (context, state) {
             _scrollController = PrimaryScrollController.of(context)!;
             _scrollController.addListener(_onScroll);
 
             switch (state.status) {
-              case IssueStatus.failure:
+              case Status.failure:
                 return const Center(child: Text('failed to fetch posts'));
-              case IssueStatus.success:
+              case Status.success:
                 if (state.items.isEmpty) {
                   return const Center(child: Text('no issues'));
                 }
@@ -116,7 +116,7 @@ class _LazyScreenState extends State<LazyScreen> {
     // log("maxScroll: $maxScroll currentScroll: $currentScroll");
 
     if (currentScroll == maxScroll && !bottomHit) {
-      context.read<IssueBloc>().add(GetIssueEvent());
+      context.read<AppBloc>().add(LoadDataEvent());
       bottomHit = true;
     } else {
       Future.delayed(const Duration(milliseconds: 1200), () {

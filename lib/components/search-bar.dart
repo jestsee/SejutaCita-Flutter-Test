@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import "package:flutter/material.dart";
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sejuta_cita_test/bloc/issue_bloc.dart';
+import 'package:sejuta_cita_test/bloc/app_bloc.dart';
 import 'package:sejuta_cita_test/constants.dart';
 
 import '../repository/issue-repository.dart';
@@ -34,7 +34,7 @@ class _SearchBarState extends State<SearchBar> {
             isEmpty = value == '';
             if (!isEmpty) {
               log("submit clicked, value:$value");
-              context.read<IssueBloc>().add(GetNewIssueEvent(value));
+              context.read<AppBloc>().add(NewQueryEvent(value));
             } else {
               final snackBar = SnackBar(
                 content: const Text("Field can't be empty"),

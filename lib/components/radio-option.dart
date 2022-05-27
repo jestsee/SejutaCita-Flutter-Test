@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sejuta_cita_test/bloc/issue_bloc.dart';
+import 'package:sejuta_cita_test/bloc/app_bloc.dart';
 import 'package:sejuta_cita_test/constants.dart';
 import 'package:sejuta_cita_test/repository/issue-repository.dart';
 
@@ -23,9 +23,7 @@ class _RadioOptionState extends State<RadioOption> {
           value: 1,
           onChanged: (value) {
             setState(() => selectedValue = value!);
-            // ganti repo yang sesuai
-            context.read<IssueBloc>().add(GetNewIssueEvent("kuda"));
-            // panggil context.read<IssueBloc>().add(GetNewIssueEvent(value))
+            context.read<AppBloc>().add(ChangeSearchTypeEvent(SearchType.users));
           },
           groupValue: selectedValue,
         ),
@@ -34,6 +32,7 @@ class _RadioOptionState extends State<RadioOption> {
           value: 2,
           onChanged: (value) {
             setState(() => selectedValue = value!);
+            context.read<AppBloc>().add(ChangeSearchTypeEvent(SearchType.issues));
           },
           groupValue: selectedValue,
         ),
@@ -42,6 +41,7 @@ class _RadioOptionState extends State<RadioOption> {
           value: 3,
           onChanged: (value) {
             setState(() => selectedValue = value!);
+            context.read<AppBloc>().add(ChangeSearchTypeEvent(SearchType.repositories));
           },
           groupValue: selectedValue,
         ),
