@@ -14,7 +14,6 @@ class GetNewIssueEvent extends IssueEvent {
   List<Object?> get props => [query];
 }
 
-// TODO hapus aja kayaknya
 // load issue dengan query yang sudah ada
 class GetIssueEvent extends IssueEvent {
   @override

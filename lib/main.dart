@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sejuta_cita_test/bloc/issue_bloc.dart';
 import 'package:sejuta_cita_test/repository/issue-repository.dart';
-import 'package:sejuta_cita_test/screens/homepage/home-screen.dart';
+import 'package:sejuta_cita_test/screens/lazy-screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.white,
           scaffoldBackgroundColor: Colors.amber,
         ),
-        home: HomeScreen(),
+        home: LazyScreen(),
       ),
     );
   }

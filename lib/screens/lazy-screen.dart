@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sejuta_cita_test/bloc/issue_bloc.dart';
-import 'package:sejuta_cita_test/components/search-bar.dart';
 import 'package:sejuta_cita_test/components/utils.dart';
 import 'package:sejuta_cita_test/constants.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -11,38 +10,22 @@ import 'package:visibility_detector/visibility_detector.dart';
 import '../components/bottom-loader.dart';
 import '../components/custom-app-bar.dart';
 import '../components/custom-bar.dart';
-import '../components/custom-bottom-bar.dart';
 import '../components/issue-list-item.dart';
 import '../models/issue-response.dart';
 import 'with-index-screen.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class LazyScreen extends StatefulWidget {
+  const LazyScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<LazyScreen> createState() => _LazyScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _LazyScreenState extends State<LazyScreen> {
   ScrollController _scrollController = ScrollController();
   int _currentIndex = 0;
   bool bottomHit = false;
   bool correctIndex = false;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  int itemCounter(List<Item> items) {
-    int counter = 30;
-
-    if (items[counter].state != "unknown") {
-      counter += 30;
-    }
-
-    return counter;
-  }
 
   @override
   Widget build(BuildContext context) {

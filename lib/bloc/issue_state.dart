@@ -2,20 +2,20 @@ part of 'issue_bloc.dart';
 
 enum IssueStatus { loading, initial, success, failure }
 
-class IssueState extends Equatable {
+class IssueState<T> extends Equatable {
   const IssueState(
       {this.status = IssueStatus.initial,
-      this.items = const <Item>[],
       this.totalItems = -1,
       this.currentPage = 1,
       this.currentIdx = 1,
       this.hasReachedMax = false,
-      this.slicedItems = const <Item>[]
+      required this.items,
+      required this.slicedItems
       });
 
   final IssueStatus status;
-  final List<Item> items;
-  final List<Item> slicedItems;
+  final List<T> items;
+  final List<T> slicedItems;
   final int totalItems;
   final int currentPage;
   final int currentIdx;
@@ -23,8 +23,8 @@ class IssueState extends Equatable {
 
   IssueState copyWith({
     IssueStatus? status,
-    List<Item>? items,
-    List<Item>? slicedItems,
+    List<T>? items,
+    List<T>? slicedItems,
     int? totalItems,
     int? currentPage,
     int? currentIdx,

@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sejuta_cita_test/bloc/issue_bloc.dart';
 import 'package:sejuta_cita_test/components/custom-app-bar.dart';
-import 'package:sejuta_cita_test/components/search-bar.dart';
 import 'package:sejuta_cita_test/constants.dart';
-import 'package:sejuta_cita_test/screens/homepage/home-screen.dart';
+import 'package:sejuta_cita_test/screens/lazy-screen.dart';
 
 import '../../components/bottom-loader.dart';
 import '../../components/custom-bar.dart';
@@ -38,7 +37,7 @@ class _IndexScreenState extends State<IndexScreen> {
                 log('INDEX -> LAZY: $_page');
                 context.read<IssueBloc>().add(IndexToLazyEvent(_page, 1));
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                  MaterialPageRoute(builder: (context) => LazyScreen()),
                 );
               }))
         ],

@@ -18,7 +18,7 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
   String query;
 
   // initial state
-  IssueBloc(this._issueRepo, this.query) : super(const IssueState()) {
+  IssueBloc(this._issueRepo, this.query) : super(const IssueState(slicedItems: [], items: [])) {
     on<GetIssueEvent>(_onIssueFetched); // TODO hapus aja kayaknya
     on<GetNewIssueEvent>(_onNewIssueFetched);
     on<GetIssueIndexEvent>(_onIssuePageFetched);
