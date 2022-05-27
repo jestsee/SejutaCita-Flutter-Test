@@ -12,30 +12,34 @@ class CustomBar extends StatelessWidget with PreferredSizeWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        RadioOption(),
-        Row(
-          children: [
-            TextButton(
-                onPressed: lazyPress,
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.black)),
-                child: const Text("Lazy Loading")),
-            const SizedBox(width: 10,),
-            TextButton(
-                onPressed: indexPress,
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.black)),
-                child: const Text("With Index")),
-          ],
-        )
-      ],
+    return Container(
+      height: 100,
+      color: Colors.blue,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          RadioOption(),
+          Row(
+            children: [
+              TextButton(
+                  onPressed: lazyPress,
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.black)),
+                  child: const Text("Lazy Loading")),
+              const SizedBox(width: 10,),
+              TextButton(
+                  onPressed: indexPress,
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.black)),
+                  child: const Text("With Index")),
+            ],
+          )
+        ],
+      ),
     );
   }
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => Size.fromHeight(70);
+  Size get preferredSize => const Size.fromHeight(100);
 }

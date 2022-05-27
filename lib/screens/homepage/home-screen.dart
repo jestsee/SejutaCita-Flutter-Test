@@ -24,7 +24,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _scrollController = ScrollController();
+  ScrollController _scrollController = ScrollController();
   int _currentIndex = 0;
   bool bottomHit = false;
   bool correctIndex = false;
@@ -32,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_onScroll);
   }
 
   int itemCounter(List<Item> items) {
@@ -50,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: NestedScrollView(
         // controller: _scrollController,
+        // floatHeaderSlivers: true,
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           CustomAppBar(
             bottom: CustomBar(
@@ -69,6 +69,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         body: BlocBuilder<IssueBloc, IssueState>(
           builder: (context, state) {
+
+            _scrollController = PrimaryScrollController.of(context)!;
+            _scrollController.addListener(_onScroll);
+
             switch (state.status) {
               case IssueStatus.failure:
                 return const Center(child: Text('failed to fetch posts'));
@@ -127,6 +131,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onScroll() {
     double maxScroll = _scrollController.position.maxScrollExtent;
     double currentScroll = _scrollController.position.pixels;
+
+    // log("maxScroll: $maxScroll currentScroll: $currentScroll");
 
     if (currentScroll == maxScroll && !bottomHit) {
       context.read<IssueBloc>().add(GetIssueEvent());

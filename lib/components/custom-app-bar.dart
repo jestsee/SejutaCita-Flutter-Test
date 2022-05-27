@@ -11,8 +11,13 @@ class CustomAppBar extends StatelessWidget {
       title: const SearchBar(),
       automaticallyImplyLeading: false,
       centerTitle: true,
-      toolbarHeight: 125,
-      // expandedHeight: 120,
+      // toolbarHeight: 70,
+      // collapsedHeight: 100,
+      // expandedHeight: 150,
+      floating: true,
+      snap: true,
+      pinned: true,
+      elevation: 3,
       bottom: bottom,
     );
   }
