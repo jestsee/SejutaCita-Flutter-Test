@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sejuta_cita_test/bloc/issue_bloc.dart';
+import 'package:sejuta_cita_test/components/list-items/repository-list-item.dart';
 import 'package:sejuta_cita_test/components/utils.dart';
 import 'package:sejuta_cita_test/constants.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -87,10 +88,7 @@ class _LazyScreenState extends State<LazyScreen> {
                       },
                       child: index >= state.items.length
                           ? BottomLoader()
-                          : IssueListItem(
-                              item: state.items[index],
-                              index: index + 1,
-                            ),
+                          : Utils.widgetDecider(state.items[index], index),
                     );
                   },
                 );

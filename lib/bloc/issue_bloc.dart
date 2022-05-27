@@ -11,8 +11,9 @@ part 'issue_event.dart';
 
 part 'issue_state.dart';
 
-class IssueBloc extends Bloc<IssueEvent, IssueState> {
-  final IssueRepo _issueRepo;
+class IssueBloc<T> extends Bloc<IssueEvent, IssueState> {
+  // final _issueRepo = IssueRepo();
+  final Repo _issueRepo;
   String query;
 
   // initial state
@@ -31,7 +32,7 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
       int page = state.items.length ~/ Constant.LIMIT;
       log("page: $page");
 
-      final issues = await _issueRepo.getIssues(query, page + 1);
+      final issues = await _issueRepo.getData(query, page + 1);
       emit(issues.items.isEmpty
           ? state.copyWith(hasReachedMax: true)
           : state.copyWith(
@@ -53,17 +54,17 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
     try {
       log("masuk initial state new issue");
       query = event.query; // set new query
-      final issues = await _issueRepo.getIssues(query, 1);
+      final issues = await _issueRepo.getData(query, 1);
       emit(state.copyWith(
         status: IssueStatus.success,
         items: issues.items,
         slicedItems: issues.items,
-        // ambil semuanya
         hasReachedMax: false,
         totalItems: issues.totalCount,
         currentPage: 1
       ));
-    } catch (_) {
+    } catch (e) {
+      log('$e');
       emit(state.copyWith(status: IssueStatus.failure));
     }
   }
@@ -90,7 +91,7 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
     // data belum tersedia ; fetch dari API
     else {
       try {
-        final issues = await _issueRepo.getIssues(query, event.page);
+        final issues = await _issueRepo.getData(query, event.page);
         var tempList = List.of(state.items);
 
         // TODO bisa dijadiin fungsi juga parameternya list sama startAt

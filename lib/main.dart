@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          IssueBloc(IssueRepo(), "doraemon")..add(GetNewIssueEvent("doraemon")),
+          IssueBloc(UserRepo(), "doraemon")..add(GetNewIssueEvent("doraemon")),
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(

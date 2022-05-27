@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:sejuta_cita_test/constants.dart';
+import 'package:sejuta_cita_test/models/user-response.dart';
 
-import '../../models/issue-response.dart';
+import '../../constants.dart';
 
-class IssueListItem extends StatelessWidget {
-  const IssueListItem({Key? key, required this.item, required this.index})
-      : super(key: key);
+class UsersListItem extends StatelessWidget {
+  const UsersListItem({Key? key, required this.item, required this.index}) : super(key: key);
 
-  final Item item;
+  final UserItem item;
   final int index;
 
   @override
@@ -21,7 +19,7 @@ class IssueListItem extends StatelessWidget {
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.network(
-                item.user.avatarUrl,
+                item.avatarUrl,
                 // height: 0.095 * size.width,
                 // width: 0.095 * size.width,
               ),
@@ -35,21 +33,16 @@ class IssueListItem extends StatelessWidget {
                     children: [
                       // Text(index.toString()),
                       Text(
-                        '$index. ${item.title}',
+                        '$index. ${item.login}',
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontWeight: FontWeight.w800,
                           fontSize: 20,
                         ),
                       ),
-                      Text(
-                          'Last update: ${DateFormat('yyyy-MM-dd HH:mm:ss').format(item.updatedAt)}'),
                     ],
                   ),
                 ),
-                Column(
-                  children: [Text(item.state)],
-                )
               ],
             )),
       ),
