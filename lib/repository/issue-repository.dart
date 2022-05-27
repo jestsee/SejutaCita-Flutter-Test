@@ -7,7 +7,7 @@ import 'package:sejuta_cita_test/services/http-service.dart';
 
 class IssueRepo {
 // Mengembalikan list of issue item
-  Future<Issue> getIssues(String query, int page) async {
+  Future<DataResponse> getIssues(String query, int page) async {
     log("API hit");
     final resp = await HttpService.getRequest("issues?q=$query&page=$page&per_page=${Constant.LIMIT}");
     if (resp.statusCode == 200) {

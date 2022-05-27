@@ -6,12 +6,12 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-Issue issueFromJson(String str) => Issue.fromJson(json.decode(str));
+DataResponse issueFromJson(String str) => DataResponse.fromJson(json.decode(str));
 
-String issueToJson(Issue data) => json.encode(data.toJson());
+String issueToJson(DataResponse data) => json.encode(data.toJson());
 
-class Issue {
-  Issue({
+class DataResponse<T> {
+  DataResponse({
     required this.totalCount,
     required this.incompleteResults,
     required this.items,
@@ -19,12 +19,12 @@ class Issue {
 
   final int totalCount;
   final bool incompleteResults;
-  final List<Item> items;
+  final List<IssueItem> items;
 
-  factory Issue.fromJson(Map<String, dynamic> json) => Issue(
+  factory DataResponse.fromJson(Map<String, dynamic> json) => DataResponse(
     totalCount: json["total_count"],
     incompleteResults: json["incomplete_results"],
-    items: List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
+    items: List<IssueItem>.from(json["items"].map((x) => IssueItem.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -34,34 +34,43 @@ class Issue {
   };
 }
 
-class Item extends Equatable{
-  Item({
-    required this.title,
-    required this.state,
-    required this.createdAt,
-    required this.updatedAt,
-  });
+class IssueItem extends Equatable{
+  IssueItem(
+    this.title,
+    this.state,
+    this.createdAt,
+    this.updatedAt,
+  );
+
+  IssueItem.emptyItem()
+      : title = "unknown",
+        state = "unknown",
+        createdAt = DateTime.utc(0),
+        updatedAt = DateTime.utc(0);
 
   final String title;
   final String state;
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  factory Item.fromJson(Map<String, dynamic> json) =>
-      Item(
-        title: json["title"] as String,
-        state: json["state"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+  factory IssueItem.fromJson(Map<String, dynamic> json) {
+    return IssueItem(
+        json["title"] as String,
+        json["state"],
+        DateTime.parse(json["created_at"]),
+        DateTime.parse(json["updated_at"]),
       );
+  }
 
-  Map<String, dynamic> toJson() =>
-      {
+  @override
+  Map<String, dynamic> toJson() {
+    return {
         "title": title,
         "state": state,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
       };
+  }
 
   @override
   List<Object?> get props => [title, state, createdAt, updatedAt];

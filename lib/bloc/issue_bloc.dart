@@ -98,11 +98,7 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
         // menangani indeks yang loncat / ga berurut
         // isi dulu bolongnya
         while (tempList.length < _startAt) {
-          tempList.add(Item(
-              title: "unknown",
-              state: "unknown",
-              createdAt: DateTime.utc(0),
-              updatedAt: DateTime.utc(0)));
+          tempList.add(IssueItem.emptyItem());
         }
 
         // baru tambahin hasil fetch

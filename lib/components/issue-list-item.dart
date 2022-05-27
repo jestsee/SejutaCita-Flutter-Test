@@ -7,7 +7,7 @@ import '../models/issue-response.dart';
 class IssueListItem extends StatelessWidget {
   const IssueListItem({Key? key, required this.item, required this.index}) : super(key: key);
 
-  final Item item;
+  final IssueItem item;
   final int index;
 
   @override
