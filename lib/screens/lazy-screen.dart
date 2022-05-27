@@ -10,7 +10,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 import '../components/bottom-loader.dart';
 import '../components/custom-app-bar.dart';
 import '../components/custom-bar.dart';
-import '../components/issue-list-item.dart';
+import '../components/list-items/issue-list-item.dart';
 import '../models/issue-response.dart';
 import 'with-index-screen.dart';
 

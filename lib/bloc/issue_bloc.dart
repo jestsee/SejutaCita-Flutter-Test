@@ -11,8 +11,6 @@ part 'issue_event.dart';
 
 part 'issue_state.dart';
 
-const throttleDuration = Duration(milliseconds: 100); // TODO
-
 class IssueBloc extends Bloc<IssueEvent, IssueState> {
   final IssueRepo _issueRepo;
   String query;

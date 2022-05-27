@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sejuta_cita_test/constants.dart';
 
-import '../models/issue-response.dart';
+import '../../models/issue-response.dart';
 
 class IssueListItem extends StatelessWidget {
   const IssueListItem({Key? key, required this.item, required this.index}) : super(key: key);

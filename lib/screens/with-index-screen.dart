@@ -10,7 +10,7 @@ import 'package:sejuta_cita_test/screens/lazy-screen.dart';
 import '../../components/bottom-loader.dart';
 import '../../components/custom-bar.dart';
 import '../../components/custom-bottom-bar.dart';
-import '../../components/issue-list-item.dart';
+import '../components/list-items/issue-list-item.dart';
 
 class IndexScreen extends StatefulWidget {
   const IndexScreen({Key? key}) : super(key: key);
