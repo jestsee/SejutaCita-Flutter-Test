@@ -95,15 +95,17 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
         final issues = await _issueRepo.getIssues(query, event.page);
         var tempList = List.of(state.items);
 
+        // TODO bisa dijadiin fungsi juga parameternya list sama startAt
         // menangani indeks yang loncat / ga berurut
         // isi dulu bolongnya
         while (tempList.length < _startAt) {
-          tempList.add(IssueItem.emptyItem());
+          tempList.add(Item.emptyItem());
         }
 
         // baru tambahin hasil fetch
         tempList.addAll(issues.items);
 
+        // TODO == unknown ini bisa dijadiin fungsi isUnknown
         // replace unknown data
         if (tempList[_startAt].state == "unknown" &&
             tempList[_endAt - 1].state == "unknown") {

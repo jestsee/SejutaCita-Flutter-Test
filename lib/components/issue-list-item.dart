@@ -7,40 +7,51 @@ import '../models/issue-response.dart';
 class IssueListItem extends StatelessWidget {
   const IssueListItem({Key? key, required this.item, required this.index}) : super(key: key);
 
-  final IssueItem item;
+  final Item item;
   final int index;
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Container(
+    return SizedBox(
       height: Constant.listTileHeight, // TODO nanti ganti
-      child: ListTile(
-          title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(index.toString()),
-                Text(
-                  item.title,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 20,
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: ListTile(
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child:
+            Image.network(
+              item.user.avatarUrl,
+              // height: 0.095 * size.width,
+              // width: 0.095 * size.width,
+            ),),
+            title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Text(index.toString()),
+                  Text(
+                    '$index. ${item.title}',
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 20,
+                    ),
                   ),
-                ),
-                Text(DateFormat('yyyy-MM-dd HH:mm:ss').format(item.updatedAt)),
-              ],
+                  Text('Last update: ${DateFormat('yyyy-MM-dd HH:mm:ss').format(item.updatedAt)}'),
+                ],
+              ),
             ),
-          ),
-          Column(
-            children: [Text(item.state)],
-          )
-        ],
-      )),
+            Column(
+              children: [Text(item.state)],
+            )
+          ],
+        )),
+      ),
     );
   }
 }

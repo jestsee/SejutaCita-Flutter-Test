@@ -6,12 +6,13 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-DataResponse issueFromJson(String str) => DataResponse.fromJson(json.decode(str));
+IssueResponse issueFromJson(String str) =>
+    IssueResponse.fromJson(json.decode(str));
 
-String issueToJson(DataResponse data) => json.encode(data.toJson());
+String issueToJson(IssueResponse data) => json.encode(data.toJson());
 
-class DataResponse<T> {
-  DataResponse({
+class IssueResponse {
+  IssueResponse({
     required this.totalCount,
     required this.incompleteResults,
     required this.items,
@@ -19,59 +20,75 @@ class DataResponse<T> {
 
   final int totalCount;
   final bool incompleteResults;
-  final List<IssueItem> items;
+  final List<Item> items;
 
-  factory DataResponse.fromJson(Map<String, dynamic> json) => DataResponse(
-    totalCount: json["total_count"],
-    incompleteResults: json["incomplete_results"],
-    items: List<IssueItem>.from(json["items"].map((x) => IssueItem.fromJson(x))),
-  );
+  factory IssueResponse.fromJson(Map<String, dynamic> json) => IssueResponse(
+        totalCount: json["total_count"],
+        incompleteResults: json["incomplete_results"],
+        items: List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "total_count": totalCount,
-    "incomplete_results": incompleteResults,
-    "items": List<dynamic>.from(items.map((x) => x.toJson())),
-  };
+        "total_count": totalCount,
+        "incomplete_results": incompleteResults,
+        "items": List<dynamic>.from(items.map((x) => x.toJson())),
+      };
 }
 
-class IssueItem extends Equatable{
-  IssueItem(
-    this.title,
-    this.state,
-    this.createdAt,
-    this.updatedAt,
-  );
-
-  IssueItem.emptyItem()
-      : title = "unknown",
-        state = "unknown",
-        createdAt = DateTime.utc(0),
-        updatedAt = DateTime.utc(0);
+class Item extends Equatable {
+  Item(
+      {required this.title,
+      required this.state,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.user});
 
   final String title;
   final String state;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final User user;
 
-  factory IssueItem.fromJson(Map<String, dynamic> json) {
-    return IssueItem(
-        json["title"] as String,
-        json["state"],
-        DateTime.parse(json["created_at"]),
-        DateTime.parse(json["updated_at"]),
+  factory Item.fromJson(Map<String, dynamic> json) => Item(
+        title: json["title"] as String,
+        state: json["state"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+        user: User.fromJson(json["user"]),
       );
-  }
 
-  @override
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson() => {
         "title": title,
         "state": state,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
+        "user": user.toJson(),
       };
-  }
+
+  Item.emptyItem()
+      : title = "unknown",
+        state = "unknown",
+        createdAt = DateTime.utc(0),
+        updatedAt = DateTime.utc(0),
+        user = User(avatarUrl: "-");
 
   @override
-  List<Object?> get props => [title, state, createdAt, updatedAt];
+  List<Object?> get props =>
+      [title, state, createdAt, updatedAt, user.avatarUrl];
+}
+
+class User {
+  User({
+    required this.avatarUrl,
+  });
+
+  final String avatarUrl;
+
+  factory User.fromJson(Map<String, dynamic> json) => User(
+        avatarUrl: json["avatar_url"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "avatar_url": avatarUrl,
+      };
 }
