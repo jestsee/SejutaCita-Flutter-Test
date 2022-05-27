@@ -8,13 +8,13 @@ import 'package:sejuta_cita_test/components/utils.dart';
 import 'package:sejuta_cita_test/constants.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-import '../../components/bottom-loader.dart';
-import '../../components/custom-app-bar.dart';
-import '../../components/custom-bar.dart';
-import '../../components/custom-bottom-bar.dart';
-import '../../components/issue-list-item.dart';
-import '../../models/issue-response.dart';
-import '../with-index-screen.dart';
+import '../components/bottom-loader.dart';
+import '../components/custom-app-bar.dart';
+import '../components/custom-bar.dart';
+import '../components/custom-bottom-bar.dart';
+import '../components/issue-list-item.dart';
+import '../models/issue-response.dart';
+import 'with-index-screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -69,7 +69,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         body: BlocBuilder<IssueBloc, IssueState>(
           builder: (context, state) {
-
             _scrollController = PrimaryScrollController.of(context)!;
             _scrollController.addListener(_onScroll);
 
@@ -88,7 +87,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemBuilder: (context, index) {
                     if (!correctIndex) {
                       Future.delayed(const Duration(milliseconds: 200), () {
-                        Utils.scrollToIndex((state.currentPage - 1) * Constant.LIMIT,
+                        Utils.scrollToIndex(
+                            (state.currentPage - 1) * Constant.LIMIT,
                             _scrollController);
                         correctIndex = true;
                       });
