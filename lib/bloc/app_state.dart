@@ -3,13 +3,15 @@ part of 'app_bloc.dart';
 enum Status { loading, initial, success, failure }
 
 class AppState<T> extends Equatable {
-  const AppState({this.status = Status.initial,
+  const AppState({
+    this.status = Status.initial,
     this.totalItems = -1,
     this.currentPage = 1,
     this.currentIdx = 1,
     this.hasReachedMax = false,
     this.type = SearchType.unknown,
     this.query = "",
+    this.errorMsg = "",
     required this.items,
     required this.slicedItems,
   });
@@ -23,38 +25,39 @@ class AppState<T> extends Equatable {
   final bool hasReachedMax;
   final SearchType type;
   final String query;
+  final String errorMsg;
 
-  AppState copyWith({Status? status,
-    List<T>? items,
-    List<T>? slicedItems,
-    int? totalItems,
-    int? currentPage,
-    int? currentIdx,
-    bool? hasReachedMax,
-    SearchType? type,
-    String? query}) {
+  AppState copyWith(
+      {Status? status,
+      List<T>? items,
+      List<T>? slicedItems,
+      int? totalItems,
+      int? currentPage,
+      int? currentIdx,
+      bool? hasReachedMax,
+      SearchType? type,
+      String? query,
+      String? errorMsg}) {
     return AppState(
-      status: status ?? this.status,
-      items: items ?? this.items,
-      slicedItems: slicedItems ?? this.slicedItems,
-      totalItems: totalItems ?? this.totalItems,
-      currentPage: currentPage ?? this.currentPage,
-      currentIdx: currentIdx ?? this.currentIdx,
-      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
-      type: type ?? this.type,
-      query: query ?? this.query,
-    );
+        status: status ?? this.status,
+        items: items ?? this.items,
+        slicedItems: slicedItems ?? this.slicedItems,
+        totalItems: totalItems ?? this.totalItems,
+        currentPage: currentPage ?? this.currentPage,
+        currentIdx: currentIdx ?? this.currentIdx,
+        hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+        type: type ?? this.type,
+        query: query ?? this.query,
+        errorMsg: errorMsg ?? this.errorMsg);
   }
 
   @override
   String toString() {
-    return '''IssueState { status: $status, hasReachedMax: $hasReachedMax, items: ${items
-        .length}, total items: $totalItems} }''';
+    return '''IssueState { status: $status, hasReachedMax: $hasReachedMax, items: ${items.length}, total items: $totalItems} }''';
   }
 
   @override
-  List<Object> get props =>
-      [
+  List<Object> get props => [
         status,
         items,
         slicedItems,
@@ -63,6 +66,7 @@ class AppState<T> extends Equatable {
         currentIdx,
         hasReachedMax,
         type,
-        query
+        query,
+        errorMsg
       ];
 }

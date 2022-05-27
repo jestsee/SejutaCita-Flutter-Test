@@ -5,7 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:sejuta_cita_test/constants.dart';
 import 'package:sejuta_cita_test/models/issue-response.dart';
-import 'package:sejuta_cita_test/repository/issue-repository.dart';
+import 'package:sejuta_cita_test/repository/repository.dart';
 
 part 'app_event.dart';
 
@@ -19,7 +19,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   // initial state
   AppBloc(this.repo, this.query)
       : super(const AppState(slicedItems: [], items: [])) {
-    on<LoadDataEvent>(_onLoadData); // TODO hapus aja kayaknya
+    on<LoadDataEvent>(_onLoadData);
     on<NewQueryEvent>(_onNewQuery);
     on<LoadDataPageEvent>(_onLoadDataPage);
     on<IndexToLazyEvent>(_onIndexToLazy);
@@ -66,8 +66,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
               status: Status.success,
               items: List.of(state.items)..addAll(issues.items),
               hasReachedMax: false));
-    } catch (_) {
-      emit(state.copyWith(status: Status.failure));
+    } catch (e) {
+      log("ERROR: $e");
+      emit(state.copyWith(status: Status.failure, errorMsg: e.toString()));
     }
   }
 
@@ -92,8 +93,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         // type: event.type
       ));
     } catch (e) {
-      log('$e');
-      emit(state.copyWith(status: Status.failure));
+      log("ERROR: $e");
+      emit(state.copyWith(status: Status.failure, errorMsg: e.toString()));
     }
   }
 
@@ -158,7 +159,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
               ));
       } catch (e) {
         log("ERROR: $e");
-        emit(state.copyWith(status: Status.failure));
+        emit(state.copyWith(status: Status.failure, errorMsg: e.toString()));
       }
     }
   }

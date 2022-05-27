@@ -14,9 +14,9 @@ class RepositoryListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: Constant.listTileHeight, // TODO nanti ganti
+      height: Constant.listTileHeight,
       child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Constant.cardRadius)),
         child: ListTile(
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(10),
@@ -35,7 +35,7 @@ class RepositoryListItem extends StatelessWidget {
                     children: [
                       // Text(index.toString()),
                       Text(
-                        '$index. ${item.fullName}',
+                        '$index. ${item.name}',
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontWeight: FontWeight.w800,
@@ -49,9 +49,9 @@ class RepositoryListItem extends StatelessWidget {
                 ),
                 Column(
                   children: [
-                    Text(item.watchersCount.toString()),
-                    Text(item.stargazersCount.toString()),
-                    Text(item.forksCount.toString()),
+                    Text('Watchers: ${item.watchersCount.toString()}'),
+                    Text('Stars: ${item.stargazersCount.toString()}'),
+                    Text('Forks: ${item.forksCount.toString()}'),
                   ],
                 )
               ],

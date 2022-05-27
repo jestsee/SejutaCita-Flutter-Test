@@ -40,6 +40,5 @@ class CustomBar extends StatelessWidget with PreferredSizeWidget{
   }
 
   @override
-  // TODO: implement preferredSize
   Size get preferredSize => const Size.fromHeight(100);
 }
