@@ -98,11 +98,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       LoadDataPageEvent event, Emitter<AppState> emit) async {
     log("ON LOAD DATA PAGEE, STATUS: ${state.status}");
 
-    if (state.hasReachedMax) {
-      log("Reach max oi");
-    }
-
-    emit(state.copyWith(status: Status.loading));
+    emit(state.copyWith(status: Status.loading, currentPage: event.page));
     int _endAt = event.page * kLimit;
     int _startAt = _endAt - kLimit;
 
