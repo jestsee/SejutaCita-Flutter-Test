@@ -29,34 +29,28 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   // ganti search type
   Future<void> _onChangeSearchType(
       ChangeSearchTypeEvent event, Emitter<AppState> emit) async {
+    log("CHANGE SEARCH TYPE, STATUS: ${state.status}");
     switch (event.type) {
       case SearchType.issues:
-        {
-          repo = IssueRepo();
-        }
+        repo = IssueRepo();
         break;
-
       case SearchType.repositories:
-        {
-          repo = RepositoryRepo();
-        }
+        repo = RepositoryRepo();
         break;
-
       default:
-        {
-          repo = UserRepo();
-        }
+        repo = UserRepo();
         break;
     }
-    emit(state.copyWith(type: event.type));
-    add(NewQueryEvent(state.query));
+    emit(state.copyWith(type: event.type, status: Status.success));
+    // add(NewQueryEvent(state.query));
   }
 
   // melanjutkan dari query yang sudah ada
   Future<void> _onLoadData(LoadDataEvent event, Emitter<AppState> emit) async {
+    log("ON LOAD DATA, STATUS: ${state.status}");
     if (state.hasReachedMax) return;
     try {
-      int page = state.items.length ~/ Constant.limit;
+      int page = (state.items.length / kLimit).ceil();
       log("page: $page");
 
       final issues = await repo.getData(query, page + 1);
@@ -74,24 +68,25 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   // memulai query baru
   Future<void> _onNewQuery(NewQueryEvent event, Emitter<AppState> emit) async {
+    log("ON NEW QUERY, STATUS: ${state.status}");
+
     // menampilkan circular indicator
     emit(state.copyWith(status: Status.loading));
 
-    if (state.hasReachedMax) return;
     try {
       log("masuk initial state new issue");
       query = event.query; // set new query
       final issues = await repo.getData(query, 1);
       emit(state.copyWith(
-        status: Status.success,
-        items: issues.items,
-        slicedItems: issues.items,
-        hasReachedMax: false,
-        totalItems: issues.totalCount,
-        currentPage: 1,
-        query: event.query
-        // type: event.type
-      ));
+          status: Status.success,
+          items: issues.items,
+          slicedItems: issues.items,
+          hasReachedMax: false,
+          totalItems: issues.totalCount,
+          currentPage: 1,
+          query: event.query
+          // type: event.type
+          ));
     } catch (e) {
       log("ERROR: $e");
       emit(state.copyWith(status: Status.failure, errorMsg: e.toString()));
@@ -101,62 +96,49 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   // load issue pada page tertentu
   Future<void> _onLoadDataPage(
       LoadDataPageEvent event, Emitter<AppState> emit) async {
-    if (state.hasReachedMax) return;
+    log("ON LOAD DATA PAGEE, STATUS: ${state.status}");
+
+    if (state.hasReachedMax) {
+      log("Reach max oi");
+    }
 
     emit(state.copyWith(status: Status.loading));
-    int _endAt = event.page * Constant.limit;
-    int _startAt = _endAt - Constant.limit;
+    int _endAt = event.page * kLimit;
+    int _startAt = _endAt - kLimit;
 
     // data sudah tersedia
-    if (_endAt <=
-            state.items
-                .length /*&&
-        state.items[_startAt].state != "unknown" &&
-        state.items[_endAt - 1].state != "unknown"*/
-        ) {
+    if (_endAt <= state.items.length || state.hasReachedMax) {
+      log("data sudah tersedia");
       emit(state.copyWith(
           status: Status.success,
-          slicedItems: state.items.sublist(_startAt, _endAt),
+          slicedItems: state.items.sublist(
+              _startAt >= 0 ? _startAt : 0,
+              _endAt <= state.items.length ? _endAt : state.items.length),
           currentPage: event.page));
     }
 
     // data belum tersedia ; fetch dari API
     else {
+      log("data belum tersedia");
       try {
         final issues = await repo.getData(query, event.page);
         var tempList = List.of(state.items);
 
-        // TODO bisa dijadiin fungsi juga parameternya list sama startAt
-        // menangani indeks yang loncat / ga berurut
-        // isi dulu bolongnya
-        while (tempList.length < _startAt) {
-          tempList.add(Item.emptyItem());
-        }
-
         // baru tambahin hasil fetch
         tempList.addAll(issues.items);
 
-        // TODO == unknown ini bisa dijadiin fungsi isUnknown
-        // replace unknown data
-        // if (tempList[_startAt].state == "unknown" &&
-        //     tempList[_endAt - 1].state == "unknown") {
-        //   log("masuk replace data baru");
-        //   tempList.replaceRange(_startAt, _endAt, issues.items);
-        // }
-
-        var tempSlicedList = tempList.sublist(_endAt - Constant.limit, _endAt);
+        var tempSlicedList = tempList.sublist(_endAt - kLimit,
+            _endAt <= tempList.length ? _endAt : tempList.length);
 
         log("startAt: $_startAt endAt: $_endAt current length: ${tempList.length}");
 
-        emit(issues.items.isEmpty
-            ? state.copyWith(hasReachedMax: true)
-            : state.copyWith(
-                status: Status.success,
-                items: tempList,
-                slicedItems: tempSlicedList,
-                currentPage: event.page,
-                hasReachedMax: false,
-              ));
+        emit(state.copyWith(
+          status: Status.success,
+          items: tempList,
+          slicedItems: tempSlicedList,
+          currentPage: event.page,
+          hasReachedMax: _endAt > tempList.length,
+        ));
       } catch (e) {
         log("ERROR: $e");
         emit(state.copyWith(status: Status.failure, errorMsg: e.toString()));
@@ -167,6 +149,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   // pindah dari index ke lazy
   Future<void> _onIndexToLazy(
       IndexToLazyEvent event, Emitter<AppState> emit) async {
-    emit(state.copyWith(currentIdx: event.idx, currentPage: event.page));
+    log("INDEX TO LAZY, STATUS: ${state.status}");
+
+    emit(state.copyWith(
+        currentIdx: event.idx,
+        currentPage: event.page,
+        status: Status.success));
   }
 }

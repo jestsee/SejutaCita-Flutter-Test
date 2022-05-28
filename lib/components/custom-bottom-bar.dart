@@ -14,30 +14,44 @@ class CustomBottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AppBloc, AppState>(
       builder: (context, state) {
-        // var totalItems =
-        //     state.totalItems > 1000 ? 33 : (state.totalItems / 30).ceil();
-
-        int page = (state.items.length / 30).ceil();
-        // log("page: $page");
+        var maxPage =
+            state.totalItems > 1000 ? 33 : (state.totalItems / 30).ceil();
 
         List<Widget> indexes = [];
-        if (page > max) {
+        int totalPage = (state.items.length / 30).ceil();
+        // log("page: $page");
+
+        indexes.add(indexNumber("<",
+            () => context.read<AppBloc>().add(LoadDataPageEvent(
+                state.currentPage > 1
+                    ? state.currentPage - 1
+                    : state.currentPage))));
+
+        if (totalPage > max) {
           for (int i = 0; i < max; i++) {
-            indexes.add(indexNumber(
-                i + 1,
+            indexes.add(indexNumber((i + 1).toString(),
                 () => context.read<AppBloc>().add(LoadDataPageEvent(i + 1))));
+
+            indexes.add(const SizedBox(
+              width: 10,
+            ));
           }
-          indexes.add(indexNumber(
-              page,
-              () =>
-                  context.read<AppBloc>().add(LoadDataPageEvent(page))));
+          indexes.add(indexNumber(totalPage.toString(),
+              () => context.read<AppBloc>().add(LoadDataPageEvent(totalPage))));
         } else {
-          for (int i = 0; i < page; i++) {
-            indexes.add(indexNumber(i + 1,
+          for (int i = 0; i < totalPage; i++) {
+            indexes.add(indexNumber((i + 1).toString(),
                 () => context.read<AppBloc>().add(LoadDataPageEvent(i + 1))));
           }
         }
 
+        indexes.add(indexNumber(">",
+                () => context.read<AppBloc>().add(LoadDataPageEvent(
+                state.currentPage < maxPage
+                    ? state.currentPage + 1
+                    : state.currentPage))));
+
+        // styling
         return Container(
           color: Colors.blue,
           height: 40,
@@ -50,11 +64,11 @@ class CustomBottomBar extends StatelessWidget {
     );
   }
 
-  Widget indexNumber(int index, Function() onTap) {
+  Widget indexNumber(String index, Function() onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Text(
-        index.toString(),
+        index,
       ),
     );
   }

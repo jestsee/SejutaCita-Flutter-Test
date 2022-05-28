@@ -34,7 +34,7 @@ class ErrorHandler extends StatelessWidget {
           child: Text(
             text,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 18),
+            style: const TextStyle(fontSize: 16),
           ),
         ),
       ],

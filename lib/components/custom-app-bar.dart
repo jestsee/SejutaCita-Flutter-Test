@@ -8,7 +8,7 @@ class CustomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      title: const SearchBar(),
+      title: SearchBar(),
       automaticallyImplyLeading: false,
       centerTitle: true,
       // toolbarHeight: 70,

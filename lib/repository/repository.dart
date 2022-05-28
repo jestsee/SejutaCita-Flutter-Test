@@ -17,7 +17,7 @@ class IssueRepo extends Repo{
   Future<IssueResponse> getData(String query, int page) async {
     log("API hit");
     final resp = await HttpService.getRequest(
-        "issues?q=$query&page=$page&per_page=${Constant.limit}");
+        "issues?q=$query&page=$page&per_page=${kLimit}");
     if (resp.statusCode == 200) {
       final result = issueFromJson(resp.body);
       return result;
@@ -33,7 +33,7 @@ class RepositoryRepo extends Repo{
   Future<RepositoryResponse> getData(String query, int page) async {
     log("API hit");
     final resp = await HttpService.getRequest(
-        "repositories?q=$query&page=$page&per_page=${Constant.limit}");
+        "repositories?q=$query&page=$page&per_page=${kLimit}");
     if (resp.statusCode == 200) {
       final result = repositoryFromJson(resp.body);
       return result;
@@ -49,7 +49,7 @@ class UserRepo extends Repo{
   Future<UserResponse> getData(String query, int page) async {
     log("API hit");
     final resp = await HttpService.getRequest(
-        "users?q=$query&page=$page&per_page=${Constant.limit}");
+        "users?q=$query&page=$page&per_page=${kLimit}");
     if (resp.statusCode == 200) {
       final result = userFromJson(resp.body);
       return result;

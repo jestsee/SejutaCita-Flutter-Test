@@ -12,9 +12,9 @@ class UsersListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: Constant.listTileHeight,
+      height: kListTileHeight,
       child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Constant.cardRadius)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kCardRadius)),
         child: ListTile(
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(10),

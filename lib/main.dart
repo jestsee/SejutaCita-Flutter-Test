@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sejuta_cita_test/bloc/app_bloc.dart';
 import 'package:sejuta_cita_test/constants.dart';
 import 'package:sejuta_cita_test/repository/repository.dart';
+import 'package:sejuta_cita_test/screens/home-screen.dart';
 import 'package:sejuta_cita_test/screens/lazy-screen.dart';
 
 void main() {
@@ -21,10 +22,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          primaryColor: Colors.white,
-          scaffoldBackgroundColor: Colors.amber,
+          scaffoldBackgroundColor: kBackgroundColor,
+          textTheme: Theme.of(context).textTheme.apply(displayColor: kTextColor),
         ),
-        home: LazyScreen(),
+        home: const HomeScreen(),
       ),
     );
   }

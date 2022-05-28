@@ -2,6 +2,8 @@
 //
 //     final user = userFromJson(jsonString);
 
+import 'dart:developer';
+
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
@@ -55,4 +57,13 @@ class UserItem {
     "avatar_url": avatarUrl,
     "html_url": htmlUrl,
   };
+
+  UserItem.emptyItem() :
+      login = "unknown",
+      avatarUrl = "unknown",
+      htmlUrl = "unknown";
+
+  bool isEmpty() {
+    return login == "unknown";
+  }
 }

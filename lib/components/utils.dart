@@ -10,7 +10,7 @@ import 'package:sejuta_cita_test/models/user-response.dart';
 
 class Utils {
   static void scrollToIndex(int index, ScrollController sc) {
-    sc.animateTo(Constant.listTileHeight * (index),
+    sc.animateTo(kListTileHeight * (index-1),
         // TODO nanti offsetnya disesuaiin lagi
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeIn);

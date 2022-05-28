@@ -42,7 +42,7 @@ class _LazyScreenState extends State<LazyScreen> {
                 // TODO
               },
               indexPress: () {
-                int page = (_currentIndex / Constant.limit).ceil();
+                int page = (_currentIndex / kLimit).ceil();
                 log("LAZY -> INDEX: $page");
                 context.read<AppBloc>().add(LoadDataPageEvent(page));
                 Navigator.of(context).push(
@@ -75,7 +75,7 @@ class _LazyScreenState extends State<LazyScreen> {
                     if (!correctIndex) {
                       Future.delayed(const Duration(milliseconds: 200), () {
                         Utils.scrollToIndex(
-                            (state.currentPage - 1) * Constant.limit,
+                            (state.currentPage - 1) * kLimit,
                             _scrollController);
                         correctIndex = true;
                       });

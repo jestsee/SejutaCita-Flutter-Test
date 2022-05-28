@@ -59,11 +59,10 @@ class _IndexScreenState extends State<IndexScreen> {
                           text: "Sorry, we couldn't find any results"));
                 }
                 return ListView.builder(
-                  itemCount: Constant.limit,
+                  itemCount: kLimit,
                   itemBuilder: (context, index) {
-                    return index >= state.slicedItems.length
-                        ? BottomLoader()
-                        : Utils.widgetDecider(state.slicedItems[index], index);
+                    return index < state.slicedItems.length
+                        ? Utils.widgetDecider(state.slicedItems[index], index) : SizedBox();
                   },
                 );
 
