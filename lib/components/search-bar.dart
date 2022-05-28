@@ -3,9 +3,7 @@ import 'dart:developer';
 import "package:flutter/material.dart";
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sejuta_cita_test/bloc/app_bloc.dart';
-import 'package:sejuta_cita_test/constants.dart';
 
-import '../repository/repository.dart';
 import '../screens/lazy-screen.dart';
 
 class SearchBar extends StatefulWidget {
@@ -23,8 +21,6 @@ class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // width: .8 * size.width,
-      // margin: EdgeInsets.symmetric(vertical: 18),
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(30)),
       child: Padding(

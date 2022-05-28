@@ -16,14 +16,13 @@ class IssueListItem extends StatelessWidget {
     return SizedBox(
       height: kListTileHeight,
       child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kCardRadius)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(kCardRadius)),
         child: ListTile(
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.network(
                 item.user.avatarUrl,
-                // height: 0.095 * size.width,
-                // width: 0.095 * size.width,
               ),
             ),
             title: Row(
@@ -33,9 +32,11 @@ class IssueListItem extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Text(index.toString()),
+                      const SizedBox(
+                        height: 18,
+                      ),
                       Text(
-                        '$index. ${item.title}',
+                        item.title,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontWeight: FontWeight.w800,
@@ -48,7 +49,12 @@ class IssueListItem extends StatelessWidget {
                   ),
                 ),
                 Column(
-                  children: [Text(item.state)],
+                  children: [
+                    const SizedBox(
+                      height: 18,
+                    ),
+                    Text(item.state)
+                  ],
                 )
               ],
             )),

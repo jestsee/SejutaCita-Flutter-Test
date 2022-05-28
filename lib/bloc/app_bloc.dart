@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:sejuta_cita_test/constants.dart';
-import 'package:sejuta_cita_test/models/issue-response.dart';
 import 'package:sejuta_cita_test/repository/repository.dart';
 
 part 'app_event.dart';
@@ -107,8 +106,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       log("data sudah tersedia");
       emit(state.copyWith(
           status: Status.success,
-          slicedItems: state.items.sublist(
-              _startAt >= 0 ? _startAt : 0,
+          slicedItems: state.items.sublist(_startAt >= 0 ? _startAt : 0,
               _endAt <= state.items.length ? _endAt : state.items.length),
           currentPage: event.page));
     }

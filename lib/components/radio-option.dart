@@ -2,10 +2,10 @@ import "package:flutter/material.dart";
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sejuta_cita_test/bloc/app_bloc.dart';
 import 'package:sejuta_cita_test/constants.dart';
-import 'package:sejuta_cita_test/repository/repository.dart';
 
 class RadioOption extends StatefulWidget {
   final bool homePage;
+
   const RadioOption({Key? key, this.homePage = false}) : super(key: key);
 
   @override
@@ -14,14 +14,6 @@ class RadioOption extends StatefulWidget {
 
 class _RadioOptionState extends State<RadioOption> {
   int selectedValue = -1;
-
-  int _valFromSearchType(SearchType s) {
-    switch(s) {
-      case SearchType.users: return 1;
-      case SearchType.issues: return 2;
-      default: return 3;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +26,9 @@ class _RadioOptionState extends State<RadioOption> {
           value: 1,
           onChanged: (value) {
             setState(() => selectedValue = value!);
-            context.read<AppBloc>().add(const ChangeSearchTypeEvent(SearchType.users));
+            context
+                .read<AppBloc>()
+                .add(const ChangeSearchTypeEvent(SearchType.users));
 
             if (!widget.homePage) {
               context.read<AppBloc>().add(NewQueryEvent(state.query));
@@ -47,7 +41,9 @@ class _RadioOptionState extends State<RadioOption> {
           value: 2,
           onChanged: (value) {
             setState(() => selectedValue = value!);
-            context.read<AppBloc>().add(const ChangeSearchTypeEvent(SearchType.issues));
+            context
+                .read<AppBloc>()
+                .add(const ChangeSearchTypeEvent(SearchType.issues));
 
             if (!widget.homePage) {
               context.read<AppBloc>().add(NewQueryEvent(state.query));
@@ -60,7 +56,9 @@ class _RadioOptionState extends State<RadioOption> {
           value: 3,
           onChanged: (value) {
             setState(() => selectedValue = value!);
-            context.read<AppBloc>().add(const ChangeSearchTypeEvent(SearchType.repositories));
+            context
+                .read<AppBloc>()
+                .add(const ChangeSearchTypeEvent(SearchType.repositories));
 
             if (!widget.homePage) {
               context.read<AppBloc>().add(NewQueryEvent(state.query));

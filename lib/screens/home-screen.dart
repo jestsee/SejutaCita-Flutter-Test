@@ -1,7 +1,5 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:sejuta_cita_test/components/custom-bottom-bar.dart';
 import 'package:sejuta_cita_test/components/radio-option.dart';
 import 'package:sejuta_cita_test/components/search-bar.dart';
 import 'package:sejuta_cita_test/constants.dart';
@@ -34,7 +32,7 @@ class HomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 9),
                     child: Text(greeting(),
                         style: Theme.of(context).textTheme.headline1?.copyWith(
-                            fontWeight: FontWeight.w900, fontSize: 72)),
+                            fontWeight: FontWeight.w900, fontSize: size.width * .15)),
                   ),
                   const SizedBox(height: 16),
                   const SearchBar(homePage: true,),

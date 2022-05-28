@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sejuta_cita_test/constants.dart';
@@ -7,7 +5,6 @@ import 'package:sejuta_cita_test/constants.dart';
 import '../bloc/app_bloc.dart';
 
 class CustomBottomBar extends StatefulWidget {
-
   const CustomBottomBar({Key? key}) : super(key: key);
 
   @override
@@ -30,56 +27,43 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
         int totalPage = (state.items.length / 30).ceil();
         // log("page: $page");
 
-        indexes.add(indexNumber(
-            "< ",
-            () {
-              setState(() {
-                curPage--;
-              });
-              context.read<AppBloc>().add(LoadDataPageEvent(
-                state.currentPage > 1
-                    ? state.currentPage - 1
-                    : state.currentPage));
-            },
-            false));
+        indexes.add(indexNumber("< ", () {
+          setState(() {
+            curPage--;
+          });
+          context.read<AppBloc>().add(LoadDataPageEvent(state.currentPage > 1
+              ? state.currentPage - 1
+              : state.currentPage));
+        }, false));
 
         if (totalPage > max) {
           for (int i = 0; i < max; i++) {
-            indexes.add(indexNumber(
-                (i + 1).toString(),
-                () {
-                  setState(() {
-                    curPage = i;
-                  });
-                  context.read<AppBloc>().add(LoadDataPageEvent(i + 1));
-                },
-                i == curPage));
+            indexes.add(indexNumber((i + 1).toString(), () {
+              setState(() {
+                curPage = i;
+              });
+              context.read<AppBloc>().add(LoadDataPageEvent(i + 1));
+            }, i == curPage));
 
             indexes.add(const SizedBox(
               width: 10,
             ));
           }
           indexes.add(indexNumber("   ...   ", () {}, false));
-          indexes.add(indexNumber(
-              totalPage.toString(),
-              () {
-                setState(() {
-                  curPage = totalPage;
-                });
-                context.read<AppBloc>().add(LoadDataPageEvent(totalPage));
-              },
-              totalPage == curPage));
+          indexes.add(indexNumber(totalPage.toString(), () {
+            setState(() {
+              curPage = totalPage;
+            });
+            context.read<AppBloc>().add(LoadDataPageEvent(totalPage));
+          }, totalPage == curPage));
         } else {
           for (int i = 0; i < totalPage; i++) {
-            indexes.add(indexNumber(
-                (i + 1).toString(),
-                () {
-                  setState(() {
-                    curPage = i;
-                  });
-                  context.read<AppBloc>().add(LoadDataPageEvent(i + 1));
-                },
-                i == curPage));
+            indexes.add(indexNumber((i + 1).toString(), () {
+              setState(() {
+                curPage = i;
+              });
+              context.read<AppBloc>().add(LoadDataPageEvent(i + 1));
+            }, i == curPage));
 
             indexes.add(const SizedBox(
               width: 10,
@@ -89,18 +73,15 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
 
         indexes.add(indexNumber("   of  $maxPage", () {}, false));
 
-        indexes.add(indexNumber(
-            " >",
-            () {
-              setState(() {
-                curPage++;
-              });
-              context.read<AppBloc>().add(LoadDataPageEvent(
-                state.currentPage < maxPage
-                    ? state.currentPage + 1
-                    : state.currentPage));
-            },
-            false));
+        indexes.add(indexNumber(" >", () {
+          setState(() {
+            curPage++;
+          });
+          context.read<AppBloc>().add(LoadDataPageEvent(
+              state.currentPage < maxPage
+                  ? state.currentPage + 1
+                  : state.currentPage));
+        }, false));
 
         // styling
         return Container(
@@ -121,8 +102,9 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
       child: Text(
         index,
         style: TextStyle(
-            fontWeight: selected ? FontWeight.w900 : FontWeight.w400,
-            fontSize: selected ? 18 : 14,),
+          fontWeight: selected ? FontWeight.w900 : FontWeight.w400,
+          fontSize: selected ? 18 : 14,
+        ),
       ),
     );
   }

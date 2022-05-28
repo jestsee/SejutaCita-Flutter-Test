@@ -16,14 +16,13 @@ class RepositoryListItem extends StatelessWidget {
     return SizedBox(
       height: kListTileHeight,
       child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kCardRadius)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(kCardRadius)),
         child: ListTile(
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.network(
                 item.owner.avatarUrl,
-                // height: 0.095 * size.width,
-                // width: 0.095 * size.width,
               ),
             ),
             title: Row(
@@ -33,9 +32,9 @@ class RepositoryListItem extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Text(index.toString()),
+                      const SizedBox(height: 10,),
                       Text(
-                        '$index. ${item.name}',
+                        item.name,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontWeight: FontWeight.w800,
@@ -49,6 +48,9 @@ class RepositoryListItem extends StatelessWidget {
                 ),
                 Column(
                   children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Text('Watchers: ${item.watchersCount.toString()}'),
                     Text('Stars: ${item.stargazersCount.toString()}'),
                     Text('Forks: ${item.forksCount.toString()}'),

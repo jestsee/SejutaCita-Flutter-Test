@@ -1,10 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:sejuta_cita_test/components/radio-option.dart';
 import 'package:sejuta_cita_test/constants.dart';
-
-import '../screens/with-index-screen.dart';
 
 class CustomBar extends StatelessWidget with PreferredSizeWidget {
   final VoidCallback lazyPress;
@@ -21,7 +17,7 @@ class CustomBar extends StatelessWidget with PreferredSizeWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          RadioOption(),
+          const RadioOption(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -30,7 +26,8 @@ class CustomBar extends StatelessWidget with PreferredSizeWidget {
                   style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),)),
+                        borderRadius: BorderRadius.circular(18.0),
+                      )),
                       backgroundColor: MaterialStateProperty.all(Colors.black)),
                   child: const Text(
                     "Lazy Loading",
@@ -44,7 +41,8 @@ class CustomBar extends StatelessWidget with PreferredSizeWidget {
                   style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),)),
+                        borderRadius: BorderRadius.circular(18.0),
+                      )),
                       backgroundColor: MaterialStateProperty.all(Colors.black)),
                   child: const Text(
                     "With Index",

@@ -9,7 +9,7 @@ class CustomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      title: SearchBar(),
+      title: const SearchBar(),
       backgroundColor: kBlueLightColor,
       automaticallyImplyLeading: false,
       centerTitle: true,
