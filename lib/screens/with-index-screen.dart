@@ -2,8 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sejuta_cita_test/bloc/issue_bloc.dart';
+import 'package:sejuta_cita_test/bloc/app_bloc.dart';
 import 'package:sejuta_cita_test/components/custom-app-bar.dart';
+import 'package:sejuta_cita_test/components/error-handler.dart';
 import 'package:sejuta_cita_test/components/utils.dart';
 import 'package:sejuta_cita_test/constants.dart';
 import 'package:sejuta_cita_test/screens/lazy-screen.dart';
@@ -33,34 +34,35 @@ class _IndexScreenState extends State<IndexScreen> {
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           CustomAppBar(
               bottom: CustomBar(indexPress: () {
-                // TODO bikin biar gabisa dipencet
-              }, lazyPress: () {
-                log('INDEX -> LAZY: $_page');
-                context.read<IssueBloc>().add(IndexToLazyEvent(_page, 1));
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => LazyScreen()),
-                );
-              }))
+            // TODO bikin biar gabisa dipencet
+          }, lazyPress: () {
+            log('INDEX -> LAZY: $_page');
+            context.read<AppBloc>().add(IndexToLazyEvent(_page, 1));
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => LazyScreen()),
+            );
+          }))
         ],
-        body: BlocBuilder<IssueBloc, IssueState>(
+        body: BlocBuilder<AppBloc, AppState>(
           builder: (context, state) {
             _page = state.currentPage;
             _idx = state.currentIdx;
             switch (state.status) {
-              case IssueStatus.failure:
-                return const Center(child: Text('failed to fetch posts'));
+              case Status.failure:
+                return Center(child: ErrorHandler(text: state.errorMsg));
 
-              case IssueStatus.success:
+              case Status.success:
                 // log("build ulang");
                 if (state.items.isEmpty) {
-                  return const Center(child: Text('no issues'));
+                  return const Center(
+                      child: ErrorHandler(
+                          text: "Sorry, we couldn't find any results"));
                 }
                 return ListView.builder(
-                  itemCount: Constant.limit,
+                  itemCount: kLimit,
                   itemBuilder: (context, index) {
-                    return index >= state.slicedItems.length
-                        ? BottomLoader()
-                        : Utils.widgetDecider(state.slicedItems[index], index);
+                    return index < state.slicedItems.length
+                        ? Utils.widgetDecider(state.slicedItems[index], index) : SizedBox();
                   },
                 );
 

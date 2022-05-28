@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:sejuta_cita_test/components/list-items/issue-list-item.dart';
 import 'package:sejuta_cita_test/components/list-items/repository-list-item.dart';
@@ -10,19 +8,17 @@ import 'package:sejuta_cita_test/models/user-response.dart';
 
 class Utils {
   static void scrollToIndex(int index, ScrollController sc) {
-    sc.animateTo(Constant.listTileHeight * (index),
-        // TODO nanti offsetnya disesuaiin lagi
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeIn);
+    sc.animateTo(kListTileHeight * (index - 1),
+        duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
   }
 
   static Widget widgetDecider(item, int index) {
     if (item is Item) {
-      return IssueListItem(item: item, index: index+1);
+      return IssueListItem(item: item, index: index + 1);
     } else if (item is UserItem) {
-      return UsersListItem(item: item, index: index+1);
+      return UsersListItem(item: item, index: index + 1);
     } else {
-      return RepositoryListItem(item: item, index: index+1);
+      return RepositoryListItem(item: item, index: index + 1);
     }
   }
 }

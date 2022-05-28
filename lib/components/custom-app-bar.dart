@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sejuta_cita_test/components/search-bar.dart';
+import 'package:sejuta_cita_test/constants.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({Key? key, required this.bottom}) : super(key: key);
@@ -9,6 +10,7 @@ class CustomAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       title: const SearchBar(),
+      backgroundColor: kBlueLightColor,
       automaticallyImplyLeading: false,
       centerTitle: true,
       // toolbarHeight: 70,

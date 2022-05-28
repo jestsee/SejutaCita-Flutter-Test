@@ -1,11 +1,12 @@
 import "package:flutter/material.dart";
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sejuta_cita_test/bloc/issue_bloc.dart';
+import 'package:sejuta_cita_test/bloc/app_bloc.dart';
 import 'package:sejuta_cita_test/constants.dart';
-import 'package:sejuta_cita_test/repository/issue-repository.dart';
 
 class RadioOption extends StatefulWidget {
-  const RadioOption({Key? key}) : super(key: key);
+  final bool homePage;
+
+  const RadioOption({Key? key, this.homePage = false}) : super(key: key);
 
   @override
   State<RadioOption> createState() => _RadioOptionState();
@@ -16,16 +17,22 @@ class _RadioOptionState extends State<RadioOption> {
 
   @override
   Widget build(BuildContext context) {
+    var state = context.read<AppBloc>().state;
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         RadioItem(
           text: "Users",
           value: 1,
           onChanged: (value) {
             setState(() => selectedValue = value!);
-            // ganti repo yang sesuai
-            context.read<IssueBloc>().add(GetNewIssueEvent("kuda"));
-            // panggil context.read<IssueBloc>().add(GetNewIssueEvent(value))
+            context
+                .read<AppBloc>()
+                .add(const ChangeSearchTypeEvent(SearchType.users));
+
+            if (!widget.homePage) {
+              context.read<AppBloc>().add(NewQueryEvent(state.query));
+            }
           },
           groupValue: selectedValue,
         ),
@@ -34,6 +41,13 @@ class _RadioOptionState extends State<RadioOption> {
           value: 2,
           onChanged: (value) {
             setState(() => selectedValue = value!);
+            context
+                .read<AppBloc>()
+                .add(const ChangeSearchTypeEvent(SearchType.issues));
+
+            if (!widget.homePage) {
+              context.read<AppBloc>().add(NewQueryEvent(state.query));
+            }
           },
           groupValue: selectedValue,
         ),
@@ -42,6 +56,13 @@ class _RadioOptionState extends State<RadioOption> {
           value: 3,
           onChanged: (value) {
             setState(() => selectedValue = value!);
+            context
+                .read<AppBloc>()
+                .add(const ChangeSearchTypeEvent(SearchType.repositories));
+
+            if (!widget.homePage) {
+              context.read<AppBloc>().add(NewQueryEvent(state.query));
+            }
           },
           groupValue: selectedValue,
         ),

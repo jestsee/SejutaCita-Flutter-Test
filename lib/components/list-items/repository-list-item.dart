@@ -14,16 +14,15 @@ class RepositoryListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: Constant.listTileHeight, // TODO nanti ganti
+      height: kListTileHeight,
       child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(kCardRadius)),
         child: ListTile(
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.network(
                 item.owner.avatarUrl,
-                // height: 0.095 * size.width,
-                // width: 0.095 * size.width,
               ),
             ),
             title: Row(
@@ -33,9 +32,9 @@ class RepositoryListItem extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Text(index.toString()),
+                      const SizedBox(height: 10,),
                       Text(
-                        '$index. ${item.fullName}',
+                        item.name,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontWeight: FontWeight.w800,
@@ -49,9 +48,12 @@ class RepositoryListItem extends StatelessWidget {
                 ),
                 Column(
                   children: [
-                    Text(item.watchersCount.toString()),
-                    Text(item.stargazersCount.toString()),
-                    Text(item.forksCount.toString()),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text('Watchers: ${item.watchersCount.toString()}'),
+                    Text('Stars: ${item.stargazersCount.toString()}'),
+                    Text('Forks: ${item.forksCount.toString()}'),
                   ],
                 )
               ],

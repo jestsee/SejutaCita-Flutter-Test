@@ -94,6 +94,10 @@ class Item extends Equatable {
         watchersCount = -1,
         forksCount = -1;
 
+  bool isEmpty() {
+    return name == "unknown";
+  }
+
   @override
   List<Object?> get props => [
         fullName,

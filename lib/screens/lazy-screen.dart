@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sejuta_cita_test/bloc/issue_bloc.dart';
+import 'package:sejuta_cita_test/bloc/app_bloc.dart';
 import 'package:sejuta_cita_test/components/list-items/repository-list-item.dart';
 import 'package:sejuta_cita_test/components/utils.dart';
 import 'package:sejuta_cita_test/constants.dart';
@@ -11,6 +11,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 import '../components/bottom-loader.dart';
 import '../components/custom-app-bar.dart';
 import '../components/custom-bar.dart';
+import '../components/error-handler.dart';
 import '../components/list-items/issue-list-item.dart';
 import '../models/issue-response.dart';
 import 'with-index-screen.dart';
@@ -41,9 +42,9 @@ class _LazyScreenState extends State<LazyScreen> {
                 // TODO
               },
               indexPress: () {
-                int page = (_currentIndex / Constant.limit).ceil();
+                int page = (_currentIndex / kLimit).ceil();
                 log("LAZY -> INDEX: $page");
-                context.read<IssueBloc>().add(GetIssueIndexEvent(page));
+                context.read<AppBloc>().add(LoadDataPageEvent(page));
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => IndexScreen()),
                 );
@@ -51,17 +52,19 @@ class _LazyScreenState extends State<LazyScreen> {
             ),
           )
         ],
-        body: BlocBuilder<IssueBloc, IssueState>(
+        body: BlocBuilder<AppBloc, AppState>(
           builder: (context, state) {
             _scrollController = PrimaryScrollController.of(context)!;
             _scrollController.addListener(_onScroll);
 
             switch (state.status) {
-              case IssueStatus.failure:
-                return const Center(child: Text('failed to fetch posts'));
-              case IssueStatus.success:
+              case Status.failure:
+                return Center(child: ErrorHandler(text: state.errorMsg));
+              case Status.success:
                 if (state.items.isEmpty) {
-                  return const Center(child: Text('no issues'));
+                  return const Center(
+                      child: ErrorHandler(
+                          text: "Sorry, we couldn't find any results."));
                 }
                 return ListView.builder(
                   itemCount: state.hasReachedMax
@@ -72,7 +75,7 @@ class _LazyScreenState extends State<LazyScreen> {
                     if (!correctIndex) {
                       Future.delayed(const Duration(milliseconds: 200), () {
                         Utils.scrollToIndex(
-                            (state.currentPage - 1) * Constant.limit,
+                            (state.currentPage - 1) * kLimit,
                             _scrollController);
                         correctIndex = true;
                       });
@@ -116,7 +119,7 @@ class _LazyScreenState extends State<LazyScreen> {
     // log("maxScroll: $maxScroll currentScroll: $currentScroll");
 
     if (currentScroll == maxScroll && !bottomHit) {
-      context.read<IssueBloc>().add(GetIssueEvent());
+      context.read<AppBloc>().add(LoadDataEvent());
       bottomHit = true;
     } else {
       Future.delayed(const Duration(milliseconds: 1200), () {

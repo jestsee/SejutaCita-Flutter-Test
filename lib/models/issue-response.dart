@@ -72,6 +72,10 @@ class Item extends Equatable {
         updatedAt = DateTime.utc(0),
         user = User(avatarUrl: "-");
 
+  bool isEmpty() {
+    return title == "unknown";
+  }
+
   @override
   List<Object?> get props =>
       [title, state, createdAt, updatedAt, user.avatarUrl];

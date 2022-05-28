@@ -1,43 +1,91 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sejuta_cita_test/constants.dart';
 
-import '../bloc/issue_bloc.dart';
+import '../bloc/app_bloc.dart';
 
-class CustomBottomBar extends StatelessWidget {
-  final int max = 5;
+class CustomBottomBar extends StatefulWidget {
   const CustomBottomBar({Key? key}) : super(key: key);
 
   @override
+  State<CustomBottomBar> createState() => _CustomBottomBarState();
+}
+
+class _CustomBottomBarState extends State<CustomBottomBar> {
+  final int max = 5;
+  int curPage = 1;
+
+  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<IssueBloc, IssueState>(
+    return BlocBuilder<AppBloc, AppState>(
       builder: (context, state) {
-        int totalItems = (state.totalItems / 30).ceil();
-        // log("division result: $totalItems");
+        var state = context.read<AppBloc>().state;
+        var maxPage =
+            state.totalItems > 1000 ? 33 : (state.totalItems / 30).ceil();
 
         List<Widget> indexes = [];
-        if (totalItems > max) {
+        int totalPage = (state.items.length / 30).ceil();
+        // log("page: $page");
+
+        indexes.add(indexNumber("< ", () {
+          setState(() {
+            curPage--;
+          });
+          context.read<AppBloc>().add(LoadDataPageEvent(state.currentPage > 1
+              ? state.currentPage - 1
+              : state.currentPage));
+        }, false));
+
+        if (totalPage > max) {
           for (int i = 0; i < max; i++) {
-            indexes.add(indexNumber(
-                // TODO harus bikin event baru kah?
-                i + 1,
-                () => context.read<IssueBloc>().add(GetIssueIndexEvent(i + 1))));
+            indexes.add(indexNumber((i + 1).toString(), () {
+              setState(() {
+                curPage = i;
+              });
+              context.read<AppBloc>().add(LoadDataPageEvent(i + 1));
+            }, i == curPage));
+
+            indexes.add(const SizedBox(
+              width: 10,
+            ));
           }
-          indexes.add(indexNumber(
-              totalItems,
-              () => context
-                  .read<IssueBloc>()
-                  .add(GetIssueIndexEvent(totalItems))));
+          indexes.add(indexNumber("   ...   ", () {}, false));
+          indexes.add(indexNumber(totalPage.toString(), () {
+            setState(() {
+              curPage = totalPage;
+            });
+            context.read<AppBloc>().add(LoadDataPageEvent(totalPage));
+          }, totalPage == curPage));
         } else {
-          for (int i = 0; i < totalItems; i++) {
-            indexes.add(indexNumber(i + 1,
-                () => context.read<IssueBloc>().add(GetIssueIndexEvent(i + 1))));
+          for (int i = 0; i < totalPage; i++) {
+            indexes.add(indexNumber((i + 1).toString(), () {
+              setState(() {
+                curPage = i;
+              });
+              context.read<AppBloc>().add(LoadDataPageEvent(i + 1));
+            }, i == curPage));
+
+            indexes.add(const SizedBox(
+              width: 10,
+            ));
           }
         }
 
+        indexes.add(indexNumber("   of  $maxPage", () {}, false));
+
+        indexes.add(indexNumber(" >", () {
+          setState(() {
+            curPage++;
+          });
+          context.read<AppBloc>().add(LoadDataPageEvent(
+              state.currentPage < maxPage
+                  ? state.currentPage + 1
+                  : state.currentPage));
+        }, false));
+
+        // styling
         return Container(
-          color: Colors.blue,
+          color: kBlueLightColor,
           height: 40,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -48,11 +96,15 @@ class CustomBottomBar extends StatelessWidget {
     );
   }
 
-  Widget indexNumber(int index, Function() onTap) {
+  Widget indexNumber(String index, Function() onTap, bool selected) {
     return GestureDetector(
       onTap: onTap,
       child: Text(
-        index.toString(),
+        index,
+        style: TextStyle(
+          fontWeight: selected ? FontWeight.w900 : FontWeight.w400,
+          fontSize: selected ? 18 : 14,
+        ),
       ),
     );
   }
